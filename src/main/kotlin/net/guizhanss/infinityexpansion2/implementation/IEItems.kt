@@ -2170,10 +2170,10 @@ object IEItems : ItemRegistry(InfinityExpansion2.instance, InfinityExpansion2.lo
         itemGroup = IEItemGroups.PLUS_MACHINES
         recipeType = RecipeType.ENHANCED_CRAFTING_TABLE
         recipe = buildRecipe {
-            +"PAP"
-            +"PBP"
+            +"SAS"
+            +"SBS"
             +"COC"
-            'P' means MAGSTEEL_PLATE
+            'S' means MAGSTEEL
             'A' means DUST_EXTRACTOR
             'B' means COBBLESTONE_GENERATOR
             'C' means MACHINE_CIRCUIT
@@ -2186,10 +2186,10 @@ object IEItems : ItemRegistry(InfinityExpansion2.instance, InfinityExpansion2.lo
         itemGroup = IEItemGroups.PLUS_MACHINES
         recipeType = RecipeType.ENHANCED_CRAFTING_TABLE
         recipe = buildRecipe {
-            +"PAP"
-            +"PAP"
+            +"SAS"
+            +"SAS"
             +"COC"
-            'P' means MAGSTEEL_PLATE
+            'S' means MAGSTEEL_PLATE
             'A' means DUST_EXTRACTOR_PLUS
             'C' means MACHINE_CIRCUIT
             'O' means MACHINE_CORE
@@ -2201,9 +2201,10 @@ object IEItems : ItemRegistry(InfinityExpansion2.instance, InfinityExpansion2.lo
         itemGroup = IEItemGroups.PLUS_MACHINES
         recipeType = RecipeType.ENHANCED_CRAFTING_TABLE
         recipe = buildRecipe {
-            +"PAP"
+            +"SAS"
             +"PAP"
             +"COC"
+            'S' means VOID_BLOCK
             'P' means MACHINE_PLATE
             'A' means DUST_EXTRACTOR_PLUS_2
             'C' means MACHINE_CIRCUIT
@@ -2216,10 +2217,11 @@ object IEItems : ItemRegistry(InfinityExpansion2.instance, InfinityExpansion2.lo
         itemGroup = IEItemGroups.PLUS_MACHINES
         recipeType = RecipeType.ENHANCED_CRAFTING_TABLE
         recipe = buildRecipe {
-            +"PAP"
+            +"SAS"
             +"PAP"
             +"COC"
-            'P' means INFINITY_INGOT
+            'S' means INFINITY_INGOT
+            'P' means VOID_INGOT
             'A' means DUST_EXTRACTOR_PLUS_3
             'C' means MACHINE_CIRCUIT
             'O' means MACHINE_CORE
@@ -2231,9 +2233,10 @@ object IEItems : ItemRegistry(InfinityExpansion2.instance, InfinityExpansion2.lo
         itemGroup = IEItemGroups.PLUS_MACHINES
         recipeType = RecipeType.ENHANCED_CRAFTING_TABLE
         recipe = buildRecipe {
-            +"PAP"
+            +"SAS"
             +"PBP"
             +"COC"
+            'S' means Material.NETHERITE_INGOT
             'P' means MAGSTEEL_PLATE
             'A' means URANIUM_INGOT_EXTRACTOR
             'B' means COBBLESTONE_GENERATOR
@@ -2247,10 +2250,10 @@ object IEItems : ItemRegistry(InfinityExpansion2.instance, InfinityExpansion2.lo
         itemGroup = IEItemGroups.PLUS_MACHINES
         recipeType = RecipeType.ENHANCED_CRAFTING_TABLE
         recipe = buildRecipe {
-            +"PAP"
-            +"PBP"
+            +"SAS"
+            +"SBS"
             +"COC"
-            'P' means MAGSTEEL_PLATE
+            'S' means MAGSTEEL
             'A' means INGOT_FORMER
             'B' means DUST_EXTRACTOR_PLUS
             'C' means MACHINE_CIRCUIT
@@ -2263,10 +2266,10 @@ object IEItems : ItemRegistry(InfinityExpansion2.instance, InfinityExpansion2.lo
         itemGroup = IEItemGroups.PLUS_MACHINES
         recipeType = RecipeType.ENHANCED_CRAFTING_TABLE
         recipe = buildRecipe {
-            +"PAP"
-            +"PAP"
+            +"SAS"
+            +"SAS"
             +"COC"
-            'P' means MAGSTEEL_PLATE
+            'S' means MAGSTEEL_PLATE
             'A' means INGOT_FORMER_PLUS
             'C' means MACHINE_CIRCUIT
             'O' means MACHINE_CORE
@@ -2278,9 +2281,10 @@ object IEItems : ItemRegistry(InfinityExpansion2.instance, InfinityExpansion2.lo
         itemGroup = IEItemGroups.PLUS_MACHINES
         recipeType = RecipeType.ENHANCED_CRAFTING_TABLE
         recipe = buildRecipe {
-            +"PAP"
+            +"SAS"
             +"PAP"
             +"COC"
+            'S' means VOID_BLOCK
             'P' means MACHINE_PLATE
             'A' means INGOT_FORMER_PLUS_2
             'C' means MACHINE_CIRCUIT
@@ -2293,10 +2297,11 @@ object IEItems : ItemRegistry(InfinityExpansion2.instance, InfinityExpansion2.lo
         itemGroup = IEItemGroups.PLUS_MACHINES
         recipeType = RecipeType.ENHANCED_CRAFTING_TABLE
         recipe = buildRecipe {
-            +"PAP"
+            +"SAS"
             +"PAP"
             +"COC"
-            'P' means INFINITY_INGOT
+            'S' means INFINITY_INGOT
+            'P' means VOID_INGOT
             'A' means INGOT_FORMER_PLUS_3
             'C' means MACHINE_CIRCUIT
             'O' means MACHINE_CORE
