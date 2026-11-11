@@ -2215,16 +2215,18 @@ object IEItems : ItemRegistry(InfinityExpansion2.instance, InfinityExpansion2.lo
     val DUST_EXTRACTOR_PLUS_4 by buildSlimefunItem<PlusMachine>(PlusMachineType.DUST, 64, 8_000) {
         material = Material.SMOKER.asMaterialType()
         itemGroup = IEItemGroups.PLUS_MACHINES
-        recipeType = RecipeType.ENHANCED_CRAFTING_TABLE
-        recipe = buildRecipe {
-            +"SAS"
-            +"PAP"
-            +"COC"
-            'S' means INFINITY_INGOT
-            'P' means VOID_INGOT
+        recipeType = IERecipeTypes.INFINITY_WORKBENCH
+        recipe = buildRecipe(6) {
+            +"V    V"
+            +"VICCIV"
+            +"VI  IV"
+            +"VIAAIV"
+            +"VI  IV"
+            +"V    V"
+            'V' means VOID_INGOT
+            'I' means INFINITY_INGOT
+            'C' means INFINITY_MACHINE_CIRCUIT
             'A' means DUST_EXTRACTOR_PLUS_3
-            'C' means MACHINE_CIRCUIT
-            'O' means MACHINE_CORE
         }
     }
 
@@ -2295,16 +2297,18 @@ object IEItems : ItemRegistry(InfinityExpansion2.instance, InfinityExpansion2.lo
     val INGOT_FORMER_PLUS_4 by buildSlimefunItem<PlusMachine>(PlusMachineType.INGOT, 32, 15_200) {
         material = Material.SMITHING_TABLE.asMaterialType()
         itemGroup = IEItemGroups.PLUS_MACHINES
-        recipeType = RecipeType.ENHANCED_CRAFTING_TABLE
-        recipe = buildRecipe {
-            +"SAS"
-            +"PAP"
-            +"COC"
-            'S' means INFINITY_INGOT
-            'P' means VOID_INGOT
+        recipeType = IERecipeTypes.INFINITY_WORKBENCH
+        recipe = buildRecipe(6) {
+            +"V    V"
+            +"VICCIV"
+            +"VI  IV"
+            +"VIAAIV"
+            +"VI  IV"
+            +"V    V"
+            'V' means VOID_INGOT
+            'I' means INFINITY_INGOT
+            'C' means INFINITY_MACHINE_CIRCUIT
             'A' means INGOT_FORMER_PLUS_3
-            'C' means MACHINE_CIRCUIT
-            'O' means MACHINE_CORE
         }
     }
     //</editor-fold>
