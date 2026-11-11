@@ -2170,13 +2170,13 @@ object IEItems : ItemRegistry(InfinityExpansion2.instance, InfinityExpansion2.lo
         itemGroup = IEItemGroups.PLUS_MACHINES
         recipeType = RecipeType.ENHANCED_CRAFTING_TABLE
         recipe = buildRecipe {
-            +"CDC"
-            +"PGP"
+            +"PAP"
+            +"PBP"
             +"COC"
-            'C' means MACHINE_CIRCUIT
-            'D' means DUST_EXTRACTOR
             'P' means MAGSTEEL_PLATE
-            'G' means COBBLESTONE_GENERATOR
+            'A' means DUST_EXTRACTOR
+            'B' means COBBLESTONE_GENERATOR
+            'C' means MACHINE_CIRCUIT
             'O' means MACHINE_CORE
         }
     }
@@ -2186,52 +2186,43 @@ object IEItems : ItemRegistry(InfinityExpansion2.instance, InfinityExpansion2.lo
         itemGroup = IEItemGroups.PLUS_MACHINES
         recipeType = RecipeType.ENHANCED_CRAFTING_TABLE
         recipe = buildRecipe {
-            +"MDM"
-            +"EGE"
+            +"PAP"
+            +"PAP"
             +"COC"
-            'M' means MAGSTEEL_PLATE
-            'D' means DUST_EXTRACTOR_PLUS
-            'E' means DUST_EXTRACTOR_2
-            'G' means COBBLESTONE_GENERATOR_2
+            'P' means MAGSTEEL_PLATE
+            'A' means DUST_EXTRACTOR_PLUS
             'C' means MACHINE_CIRCUIT
             'O' means MACHINE_CORE
         }
     }
 
-    val DUST_EXTRACTOR_PLUS_3 by buildSlimefunItem<PlusMachine>(PlusMachineType.DUST, 32, 2760) {
+    val DUST_EXTRACTOR_PLUS_3 by buildSlimefunItem<PlusMachine>(PlusMachineType.DUST, 32, 2_760) {
         material = Material.SMOKER.asMaterialType()
         itemGroup = IEItemGroups.PLUS_MACHINES
         recipeType = RecipeType.ENHANCED_CRAFTING_TABLE
         recipe = buildRecipe {
-            +"VDV"
-            +"EGE"
-            +"POP"
-            'V' means VOID_BLOCK
-            'D' means DUST_EXTRACTOR_PLUS_2
-            'E' means DUST_EXTRACTOR_3
-            'G' means COBBLESTONE_GENERATOR_3
+            +"PAP"
+            +"PAP"
+            +"COC"
             'P' means MACHINE_PLATE
+            'A' means DUST_EXTRACTOR_PLUS_2
+            'C' means MACHINE_CIRCUIT
             'O' means MACHINE_CORE
         }
     }
 
-    val DUST_EXTRACTOR_PLUS_4 by buildSlimefunItem<PlusMachine>(PlusMachineType.DUST, 64, 8000) {
+    val DUST_EXTRACTOR_PLUS_4 by buildSlimefunItem<PlusMachine>(PlusMachineType.DUST, 64, 8_000) {
         material = Material.SMOKER.asMaterialType()
         itemGroup = IEItemGroups.PLUS_MACHINES
-        recipeType = IERecipeTypes.INFINITY_WORKBENCH
-        recipe = buildRecipe(6) {
-            +"V    V"
-            +"VICCIV"
-            +"VIDDIV"
-            +"VIEGIV"
-            +"VI  IV"
-            +"V    V"
-            'V' means VOID_INGOT
-            'I' means INFINITY_INGOT
-            'C' means INFINITY_MACHINE_CIRCUIT
-            'D' means DUST_EXTRACTOR_PLUS_3
-            'E' means DUST_EXTRACTOR_4
-            'G' means COBBLESTONE_GENERATOR_4
+        recipeType = RecipeType.ENHANCED_CRAFTING_TABLE
+        recipe = buildRecipe {
+            +"PAP"
+            +"PAP"
+            +"COC"
+            'P' means INFINITY_INGOT
+            'A' means DUST_EXTRACTOR_PLUS_3
+            'C' means MACHINE_CIRCUIT
+            'O' means MACHINE_CORE
         }
     }
 
@@ -2240,13 +2231,13 @@ object IEItems : ItemRegistry(InfinityExpansion2.instance, InfinityExpansion2.lo
         itemGroup = IEItemGroups.PLUS_MACHINES
         recipeType = RecipeType.ENHANCED_CRAFTING_TABLE
         recipe = buildRecipe {
-            +"NUN"
-            +"CGC"
-            +"NON"
-            'N' means Material.NETHERITE_INGOT
-            'U' means URANIUM_INGOT_EXTRACTOR
+            +"PAP"
+            +"PBP"
+            +"COC"
+            'P' means MAGSTEEL_PLATE
+            'A' means URANIUM_INGOT_EXTRACTOR
+            'B' means COBBLESTONE_GENERATOR
             'C' means MACHINE_CIRCUIT
-            'G' means COBBLESTONE_GENERATOR_2
             'O' means MACHINE_CORE
         }
     }
@@ -2256,68 +2247,59 @@ object IEItems : ItemRegistry(InfinityExpansion2.instance, InfinityExpansion2.lo
         itemGroup = IEItemGroups.PLUS_MACHINES
         recipeType = RecipeType.ENHANCED_CRAFTING_TABLE
         recipe = buildRecipe {
-            +"CIC"
-            +"PDP"
+            +"PAP"
+            +"PBP"
             +"COC"
-            'C' means MACHINE_CIRCUIT
-            'I' means INGOT_FORMER
             'P' means MAGSTEEL_PLATE
-            'D' means DUST_EXTRACTOR_PLUS
-            'O' means MACHINE_CORE
-        }
-    }
-
-    val INGOT_FORMER_PLUS_2 by buildSlimefunItem<PlusMachine>(PlusMachineType.INGOT, 8, 1720) {
-        material = Material.SMITHING_TABLE.asMaterialType()
-        itemGroup = IEItemGroups.PLUS_MACHINES
-        recipeType = RecipeType.ENHANCED_CRAFTING_TABLE
-        recipe = buildRecipe {
-            +"MFM"
-            +"IDI"
-            +"COC"
-            'M' means MAGSTEEL_PLATE
-            'F' means INGOT_FORMER_PLUS
-            'I' means INGOT_FORMER_2
-            'D' means DUST_EXTRACTOR_PLUS_2
+            'A' means INGOT_FORMER
+            'B' means DUST_EXTRACTOR_PLUS
             'C' means MACHINE_CIRCUIT
             'O' means MACHINE_CORE
         }
     }
 
-    val INGOT_FORMER_PLUS_3 by buildSlimefunItem<PlusMachine>(PlusMachineType.INGOT, 16, 5160) {
+    val INGOT_FORMER_PLUS_2 by buildSlimefunItem<PlusMachine>(PlusMachineType.INGOT, 8, 1_720) {
         material = Material.SMITHING_TABLE.asMaterialType()
         itemGroup = IEItemGroups.PLUS_MACHINES
         recipeType = RecipeType.ENHANCED_CRAFTING_TABLE
         recipe = buildRecipe {
-            +"VFV"
-            +"IDI"
-            +"POP"
-            'V' means VOID_BLOCK
-            'F' means INGOT_FORMER_PLUS_2
-            'I' means INGOT_FORMER_3
-            'D' means DUST_EXTRACTOR_PLUS_3
-            'P' means MACHINE_PLATE
+            +"PAP"
+            +"PAP"
+            +"COC"
+            'P' means MAGSTEEL_PLATE
+            'A' means INGOT_FORMER_PLUS
+            'C' means MACHINE_CIRCUIT
             'O' means MACHINE_CORE
         }
     }
 
-    val INGOT_FORMER_PLUS_4 by buildSlimefunItem<PlusMachine>(PlusMachineType.INGOT, 32, 15200) {
+    val INGOT_FORMER_PLUS_3 by buildSlimefunItem<PlusMachine>(PlusMachineType.INGOT, 16, 5_160) {
         material = Material.SMITHING_TABLE.asMaterialType()
         itemGroup = IEItemGroups.PLUS_MACHINES
-        recipeType = IERecipeTypes.INFINITY_WORKBENCH
-        recipe = buildRecipe(6) {
-            +"V    V"
-            +"VICCIV"
-            +"VIFFIV"
-            +"VIEDIV"
-            +"VI  IV"
-            +"V    V"
-            'V' means VOID_INGOT
-            'I' means INFINITY_INGOT
-            'C' means INFINITY_MACHINE_CIRCUIT
-            'F' means INGOT_FORMER_PLUS_3
-            'E' means INGOT_FORMER_4
-            'D' means DUST_EXTRACTOR_PLUS_4
+        recipeType = RecipeType.ENHANCED_CRAFTING_TABLE
+        recipe = buildRecipe {
+            +"PAP"
+            +"PAP"
+            +"COC"
+            'P' means MACHINE_PLATE
+            'A' means INGOT_FORMER_PLUS_2
+            'C' means MACHINE_CIRCUIT
+            'O' means MACHINE_CORE
+        }
+    }
+
+    val INGOT_FORMER_PLUS_4 by buildSlimefunItem<PlusMachine>(PlusMachineType.INGOT, 32, 15_200) {
+        material = Material.SMITHING_TABLE.asMaterialType()
+        itemGroup = IEItemGroups.PLUS_MACHINES
+        recipeType = RecipeType.ENHANCED_CRAFTING_TABLE
+        recipe = buildRecipe {
+            +"PAP"
+            +"PAP"
+            +"COC"
+            'P' means INFINITY_INGOT
+            'A' means INGOT_FORMER_PLUS_3
+            'C' means MACHINE_CIRCUIT
+            'O' means MACHINE_CORE
         }
     }
     //</editor-fold>
