@@ -1051,6 +1051,33 @@ items:
       - "&8\u21E8 &e⚡ &7Speed: &b1x"
     lore-overrides:
       4: "%sftrlore_Speed_1%" # DO NOT translate this
+  OBSIDIAN_GENERATOR_2:
+    name: "&cAdvanced &8Obsidian Generator"
+    lore:
+      - ""
+      - "&7Produces obsidian."
+      - ""
+      - "&8⇨ &e⚡ &7Speed: &b4x"
+    lore-overrides:
+      4: "%sftrlore_Speed_4%" # DO NOT translate this
+  OBSIDIAN_GENERATOR_3:
+    name: "&7Void &8Obsidian Generator"
+    lore:
+      - ""
+      - "&7Produces obsidian."
+      - ""
+      - "&8⇨ &e⚡ &7Speed: &b16x"
+    lore-overrides:
+      4: "%sftrlore_Speed_16%" # DO NOT translate this
+  OBSIDIAN_GENERATOR_4:
+    name: "&bInfinity &8Obsidian Generator"
+    lore:
+      - ""
+      - "&7Produces obsidian."
+      - ""
+      - "&8⇨ &e⚡ &7Speed: &b64x"
+    lore-overrides:
+      4: "%sftrlore_Speed_64%" # DO NOT translate this
   EXTREME_FREEZER:
     name: "&bExtreme Freezer"
     lore:

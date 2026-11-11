@@ -1748,7 +1748,53 @@ object IEItems : ItemRegistry(InfinityExpansion2.instance, InfinityExpansion2.lo
         }
     }
 
-    // TODO: more tiers of obsidian generator
+    val OBSIDIAN_GENERATOR_2 by buildSlimefunItem<ObsidianGenerator>(Material.OBSIDIAN, 4, 800) {
+        material = Material.SMOOTH_STONE.asMaterialType()
+        itemGroup = IEItemGroups.MACHINES
+        recipeType = RecipeType.ENHANCED_CRAFTING_TABLE
+        recipe = buildRecipe {
+            +"PGP"
+            +"VOV"
+            +"PGP"
+            'P' means MAGSTEEL_PLATE
+            'G' means OBSIDIAN_GENERATOR
+            'V' means VOID_INGOT
+            'O' means MACHINE_CORE
+        }
+    }
+
+    val OBSIDIAN_GENERATOR_3 by buildSlimefunItem<ObsidianGenerator>(Material.OBSIDIAN, 16, 2400) {
+        material = Material.SMOOTH_STONE.asMaterialType()
+        itemGroup = IEItemGroups.MACHINES
+        recipeType = RecipeType.ENHANCED_CRAFTING_TABLE
+        recipe = buildRecipe {
+            +"VGV"
+            +"PCP"
+            +"VGV"
+            'V' means VOID_BLOCK
+            'G' means OBSIDIAN_GENERATOR_2
+            'P' means MACHINE_PLATE
+            'C' means COBBLESTONE_GENERATOR_3
+        }
+    }
+
+    val OBSIDIAN_GENERATOR_4 by buildSlimefunItem<ObsidianGenerator>(Material.OBSIDIAN, 64, 6400) {
+        material = Material.SMOOTH_STONE.asMaterialType()
+        itemGroup = IEItemGroups.MACHINES
+        recipeType = IERecipeTypes.INFINITY_WORKBENCH
+        recipe = buildRecipe(6) {
+            +"IV  VI"
+            +" VGGV "
+            +" VCCV "
+            +" VCCV "
+            +" VGGV "
+            +"IV  VI"
+            'V' means VOID_INGOT
+            'I' means INFINITY_INGOT
+            'G' means OBSIDIAN_GENERATOR_3
+            'C' means INFINITY_MACHINE_CIRCUIT
+        }
+    }
 
     val EXTREME_FREEZER by buildSlimefunItem<ExtremeFreezer>(90) {
         material = Material.LIGHT_BLUE_CONCRETE.asMaterialType()
