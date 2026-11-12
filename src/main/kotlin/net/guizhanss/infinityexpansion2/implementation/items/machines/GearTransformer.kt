@@ -38,13 +38,31 @@ class GearTransformer(
         preset.drawBackground(MATERIAL_BORDER_ITEM, MATERIAL_BORDER)
     }
 
+    /**
+     * Routes items inserted by cargo / networks to the correct slot.
+     * Gears go to the gear slot, valid materials go to the material slot, everything else is rejected
+     * so that the machine never gets clogged by unrelated items.
+     */
     override fun getInputSlots(menu: DirtyChestMenu, item: ItemStack): IntArray {
-        return if (IETag.UPGRADABLE_TOOL.isTagged(item.type) || IETag.UPGRADABLE_ARMOR.isTagged(item.type)) {
-            intArrayOf(inputSlots[0])
-        } else {
-            intArrayOf(inputSlots[1])
+        return when {
+            isGear(item) -> {
+                if (!InfinityExpansion2.configService.gearTransformerAllowSfItems.value && item.isSlimefunItem()) {
+                    intArrayOf()
+                } else {
+                    intArrayOf(inputSlots[0])
+                }
+            }
+
+            isMaterial(item) -> intArrayOf(inputSlots[1])
+            else -> intArrayOf()
         }
     }
+
+    private fun isGear(item: ItemStack) =
+        IETag.UPGRADABLE_TOOL.isTagged(item.type) || IETag.UPGRADABLE_ARMOR.isTagged(item.type)
+
+    private fun isMaterial(item: ItemStack) =
+        !item.isSlimefunItem() && (TOOLS.values + ARMORS.values).any { ItemUtils.canStack(item, it) }
 
     override fun process(b: Block, menu: BlockMenu): Boolean {
         val gear = menu.getItemInSlot(inputSlots[0])
@@ -75,19 +93,30 @@ class GearTransformer(
     }
 
     private fun process(menu: BlockMenu, map: Map<String, ItemStack>, gear: ItemStack, material: ItemStack): Boolean {
-        // make sure the current gear material is in the map
-        val current = map.entries.firstOrNull { gear.type.name.startsWith(it.key) } ?: return false
-
         // find the new material
-        val new = map.entries.firstOrNull { ItemUtils.canStack(material, it.value) } ?: return false
+        val new = map.entries.firstOrNull { ItemUtils.canStack(material, it.value) }
+        if (new == null) {
+            menu.setStatus { GuiItems.INVALID_INPUT }
+            return false
+        }
 
-        // the new material shouldn't be same as current
-        if (current.key == new.key) {
+        // find the current gear material, if the gear is unknown or already the target material,
+        // move it to output unchanged so cargo / networks do not get stuck
+        val current = map.entries.firstOrNull { gear.type.name.startsWith(it.key) }
+        if (current == null || current.key == new.key) {
+            return passThrough(menu, gear)
+        }
+
+        // not enough material
+        if (material.amount < new.value.amount) {
+            menu.setStatus { GuiItems.INVALID_INPUT }
             return false
         }
 
         // change the material
-        val newGear = Material.getMaterial(gear.type.name.replace(current.key, new.key))!!.toItem(gear.amount)
+        val newType = Material.getMaterial(gear.type.name.replace(current.key, new.key))
+            ?: return passThrough(menu, gear)
+        val newGear = newType.toItem(gear.amount)
         newGear.itemMeta = gear.itemMeta
 
         // update the menu
@@ -100,6 +129,17 @@ class GearTransformer(
         menu.pushItem(newGear, *outputSlots)
 
         return true
+    }
+
+    private fun passThrough(menu: BlockMenu, gear: ItemStack): Boolean {
+        if (!menu.fits(gear, *outputSlots)) {
+            menu.setStatus { GuiItems.NO_ROOM }
+            return false
+        }
+        val output = gear.clone()
+        menu.consumeItem(inputSlots[0], gear.amount)
+        menu.pushItem(output, *outputSlots)
+        return false
     }
 
     override fun getInfoItems() = listOf(
