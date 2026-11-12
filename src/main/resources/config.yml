@@ -185,7 +185,6 @@ quarry:
     COPPER_INGOT: .5
     IRON_INGOT: .5
     NETHERITE_INGOT: .5
-    OBSIDIAN: .5
 
 # The maximum possible level of every enchantment in advanced anvil
 # all the keys are the key part of an Enchantment's NamespacedKey
