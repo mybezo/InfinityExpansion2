@@ -2001,7 +2001,7 @@ object IEItems : ItemRegistry(InfinityExpansion2.instance, InfinityExpansion2.lo
         }
     }
 
-    val QUARRY by buildSlimefunItem<Quarry>(300, 1, 0.15) {
+    val QUARRY by buildSlimefunItem<Quarry>(300, 1, 0.15, 1) {
         material = Material.CHISELED_SANDSTONE.asMaterialType()
         itemGroup = IEItemGroups.MACHINES
         recipeType = RecipeType.ENHANCED_CRAFTING_TABLE
@@ -2018,7 +2018,7 @@ object IEItems : ItemRegistry(InfinityExpansion2.instance, InfinityExpansion2.lo
         }
     }
 
-    val QUARRY_2 by buildSlimefunItem<Quarry>(900, 2, 0.25) {
+    val QUARRY_2 by buildSlimefunItem<Quarry>(900, 2, 0.25, 2) {
         material = Material.CHISELED_RED_SANDSTONE.asMaterialType()
         itemGroup = IEItemGroups.MACHINES
         recipeType = RecipeType.ENHANCED_CRAFTING_TABLE
@@ -2035,7 +2035,7 @@ object IEItems : ItemRegistry(InfinityExpansion2.instance, InfinityExpansion2.lo
         }
     }
 
-    val QUARRY_3 by buildSlimefunItem<Quarry>(3600, 4, 0.5) {
+    val QUARRY_3 by buildSlimefunItem<Quarry>(3600, 4, 0.5, 3) {
         material = Material.CHISELED_NETHER_BRICKS.asMaterialType()
         itemGroup = IEItemGroups.MACHINES
         recipeType = RecipeType.ENHANCED_CRAFTING_TABLE
@@ -2052,7 +2052,7 @@ object IEItems : ItemRegistry(InfinityExpansion2.instance, InfinityExpansion2.lo
         }
     }
 
-    val QUARRY_4 by buildSlimefunItem<Quarry>(36000, 64, 1.0) {
+    val QUARRY_4 by buildSlimefunItem<Quarry>(36000, 64, 1.0, 4) {
         material = Material.CHISELED_POLISHED_BLACKSTONE.asMaterialType()
         itemGroup = IEItemGroups.MACHINES
         recipeType = IERecipeTypes.INFINITY_WORKBENCH
