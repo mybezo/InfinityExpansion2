@@ -31,7 +31,8 @@ class Quarry(
     recipe: Array<out ItemStack?>,
     energyPerTick: Int,
     val speed: Int, // the amount of output
-    chance: Double
+    chance: Double,
+    val tier: Int, // 1 = basic, 2 = advanced, 3 = void, 4 = infinity
 ) : AbstractTickingMachine(itemGroup, itemStack, recipeType, recipe, MenuLayout.SINGLE_INPUT, energyPerTick),
     InformationalRecipeDisplayItem, CustomWikiItem {
 
@@ -84,11 +85,12 @@ class Quarry(
             val oscillatorItem = menu.getItemInSlot(inputSlots[0])
             // check if oscillator doesn't exist, not applicable to current pool, or it doesn't activate
             return if (oscillatorItem == null || !Oscillator.isOscillator(oscillatorItem)
-                || Oscillator.getTarget(oscillatorItem) !in pool.products.keys
+                || Oscillator.getTarget(oscillatorItem)?.let { pool.isAvailable(it, tier) } != true
                 || Random.nextDouble() > Oscillator.getChance(oscillatorItem)
             ) {
-                // normal product from pool
-                pool.getRandomProduct().toItemStack().edit { amount(speed) }
+                // normal product from pool, fall back to base product if nothing is available
+                val product = pool.getRandomProduct(tier) ?: pool.baseProduct
+                product.toItemStack().edit { amount(speed) }
             } else {
                 // oscillator product
                 Oscillator.getTarget(oscillatorItem)!!.toItemStack().edit { amount(speed) }
@@ -114,13 +116,14 @@ class Quarry(
                 }
             )
             result.add(pool.baseProduct.toItemStack().edit { amount(speed) })
-            pool.products.forEach { (product, amount) ->
+            val products = pool.getProducts(tier)
+            products.forEach { (product, amount) ->
                 result.add(product.toItemStack().edit {
                     amount(amount)
                     lore("&7$amount")
                 })
             }
-            if (pool.products.size % 2 != 0) {
+            if (products.size % 2 != 0) {
                 result.add(null)
             }
             result.addAll(listOf(null, null))

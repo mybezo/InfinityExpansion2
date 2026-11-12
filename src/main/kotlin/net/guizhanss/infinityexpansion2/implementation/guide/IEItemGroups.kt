@@ -26,6 +26,7 @@ object IEItemGroups {
     val TOOLS = createSubGroup("tools", Material.DIAMOND_PICKAXE.asMaterialType())
     val GEAR = createSubGroup("gear", Material.DIAMOND_CHESTPLATE.asMaterialType())
     val MACHINES = createSubGroup("machines", Material.LOOM.asMaterialType())
+    val PLUS_MACHINES = createSubGroup("plus_machines", Material.SMOKER.asMaterialType())
     val GENERATORS = createSubGroup("generators", Material.BLAST_FURNACE.asMaterialType())
     val MOB_SIMULATION = createSubGroup("mob_simulation", Material.BEACON.asMaterialType())
     val STORAGE = createSubGroup("storage", Material.BEEHIVE.asMaterialType())
@@ -41,6 +42,7 @@ object IEItemGroups {
             TOOLS,
             GEAR,
             MACHINES,
+            PLUS_MACHINES,
             GENERATORS,
             MOB_SIMULATION,
             STORAGE,

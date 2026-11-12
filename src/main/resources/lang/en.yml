@@ -32,6 +32,10 @@ items:
     conditions:
       force-load: true
     name: "&k.&bI&4E&a&l2&k. &a- &9Machines"
+  _IG_PLUS_MACHINES:
+    conditions:
+      force-load: true
+    name: "&k.&bI&4E&a&l2&k. &a- &6Plus Machines"
   _IG_GENERATORS:
     conditions:
       force-load: true
@@ -1051,6 +1055,33 @@ items:
       - "&8\u21E8 &e⚡ &7Speed: &b1x"
     lore-overrides:
       4: "%sftrlore_Speed_1%" # DO NOT translate this
+  OBSIDIAN_GENERATOR_2:
+    name: "&cAdvanced &8Obsidian Generator"
+    lore:
+      - ""
+      - "&7Produces obsidian."
+      - ""
+      - "&8⇨ &e⚡ &7Speed: &b4x"
+    lore-overrides:
+      4: "%sftrlore_Speed_4%" # DO NOT translate this
+  OBSIDIAN_GENERATOR_3:
+    name: "&7Void &8Obsidian Generator"
+    lore:
+      - ""
+      - "&7Produces obsidian."
+      - ""
+      - "&8⇨ &e⚡ &7Speed: &b16x"
+    lore-overrides:
+      4: "%sftrlore_Speed_16%" # DO NOT translate this
+  OBSIDIAN_GENERATOR_4:
+    name: "&bInfinity &8Obsidian Generator"
+    lore:
+      - ""
+      - "&7Produces obsidian."
+      - ""
+      - "&8⇨ &e⚡ &7Speed: &b64x"
+    lore-overrides:
+      4: "%sftrlore_Speed_64%" # DO NOT translate this
   EXTREME_FREEZER:
     name: "&bExtreme Freezer"
     lore:
@@ -1169,6 +1200,97 @@ items:
       - "&8\u21E8 &e⚡ &7Speed: &b1x"
     lore-overrides:
       4: "%sftrlore_Speed_1%" # DO NOT translate this
+  # plus machines
+  DUST_EXTRACTOR_PLUS:
+    name: "&7Dust Extractor &6Plus"
+    lore:
+      - ""
+      - "&7Produces dust directly."
+      - "&7No input required."
+      - ""
+      - "&8\u21E8 &e⚡ &7Speed: &b1x"
+    lore-overrides:
+      5: "%sftrlore_Speed_1%" # DO NOT translate this
+  DUST_EXTRACTOR_PLUS_2:
+    name: "&cAdvanced &7Dust Extractor &6Plus"
+    lore:
+      - ""
+      - "&7Produces dust directly."
+      - "&7No input required."
+      - ""
+      - "&8\u21E8 &e⚡ &7Speed: &b2x"
+    lore-overrides:
+      5: "%sftrlore_Speed_2%" # DO NOT translate this
+  DUST_EXTRACTOR_PLUS_3:
+    name: "&8Void &7Dust Extractor &6Plus"
+    lore:
+      - ""
+      - "&7Produces dust directly."
+      - "&7No input required."
+      - ""
+      - "&8\u21E8 &e⚡ &7Speed: &b8x"
+    lore-overrides:
+      5: "%sftrlore_Speed_8%" # DO NOT translate this
+  DUST_EXTRACTOR_PLUS_4:
+    name: "&bInfinity &7Dust Extractor &6Plus"
+    lore:
+      - ""
+      - "&7Produces dust directly."
+      - "&7No input required."
+      - ""
+      - "&8\u21E8 &e⚡ &7Speed: &b16x"
+    lore-overrides:
+      5: "%sftrlore_Speed_16%" # DO NOT translate this
+  URANIUM_INGOT_EXTRACTOR_PLUS:
+    name: "&aUranium Ingot Extractor &6Plus"
+    lore:
+      - ""
+      - "&7Produces uranium directly."
+      - "&7No input required."
+      - ""
+      - "&8\u21E8 &e⚡ &7Speed: &b1x"
+    lore-overrides:
+      5: "%sftrlore_Speed_1%" # DO NOT translate this
+  INGOT_FORMER_PLUS:
+    name: "&7Ingot Former &6Plus"
+    lore:
+      - ""
+      - "&7Produces ingots directly."
+      - "&7No input required."
+      - ""
+      - "&8\u21E8 &e⚡ &7Speed: &b1x"
+    lore-overrides:
+      5: "%sftrlore_Speed_1%" # DO NOT translate this
+  INGOT_FORMER_PLUS_2:
+    name: "&cAdvanced &7Ingot Former &6Plus"
+    lore:
+      - ""
+      - "&7Produces ingots directly."
+      - "&7No input required."
+      - ""
+      - "&8\u21E8 &e⚡ &7Speed: &b2x"
+    lore-overrides:
+      5: "%sftrlore_Speed_2%" # DO NOT translate this
+  INGOT_FORMER_PLUS_3:
+    name: "&8Void &7Ingot Former &6Plus"
+    lore:
+      - ""
+      - "&7Produces ingots directly."
+      - "&7No input required."
+      - ""
+      - "&8\u21E8 &e⚡ &7Speed: &b8x"
+    lore-overrides:
+      5: "%sftrlore_Speed_8%" # DO NOT translate this
+  INGOT_FORMER_PLUS_4:
+    name: "&bInfinity &7Ingot Former &6Plus"
+    lore:
+      - ""
+      - "&7Produces ingots directly."
+      - "&7No input required."
+      - ""
+      - "&8\u21E8 &e⚡ &7Speed: &b16x"
+    lore-overrides:
+      5: "%sftrlore_Speed_16%" # DO NOT translate this
   QUARRY:
     name: "&9Basic Quarry"
     lore:
