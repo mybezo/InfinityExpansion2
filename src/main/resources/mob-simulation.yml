@@ -168,6 +168,84 @@ bee:
         item: HONEY_BLOCK
         amount: 16
 
+salmon:
+  enabled: true
+  name: "Salmon"
+  texture: IRON_CHESTPLATE
+  energy: 75
+  experience: 1
+  drops:
+    - item: SALMON
+      chance: 1
+    - item: BONE_MEAL
+      chance: 0.05
+  recipe:
+    pattern:
+      - "FBF"
+      - "KXK"
+      - "FBF"
+    ingredient:
+      F:
+        item: SALMON
+        amount: 64
+      B:
+        item: BONE_BLOCK
+        amount: 16
+      K:
+        item: COOKED_SALMON
+        amount: 64
+
+cod:
+  enabled: true
+  name: "Cod"
+  texture: IRON_CHESTPLATE
+  energy: 75
+  experience: 1
+  drops:
+    - item: COD
+      chance: 1
+    - item: BONE_MEAL
+      chance: 0.05
+  recipe:
+    pattern:
+      - "FBF"
+      - "KXK"
+      - "FBF"
+    ingredient:
+      F:
+        item: COD
+        amount: 64
+      B:
+        item: BONE_BLOCK
+        amount: 16
+      K:
+        item: COOKED_COD
+        amount: 64
+
+pufferfish:
+  enabled: true
+  name: "Pufferfish"
+  texture: IRON_CHESTPLATE
+  energy: 75
+  experience: 1
+  drops:
+    - item: PUFFERFISH
+      chance: 1
+    - item: BONE_MEAL
+      chance: 0.05
+  recipe:
+    pattern:
+      - "FBF"
+      - "BXB"
+      - "FBF"
+    ingredient:
+      F:
+        item: PUFFERFISH
+        amount: 64
+      B:
+        item: BONE_BLOCK
+        amount: 16
+
 slime:
   enabled: true
   name: "Slime"
@@ -464,6 +542,28 @@ guardian:
         amount: 64
       S:
         item: PRISMARINE_CRYSTALS
+        amount: 64
+
+phantom:
+  enabled: true
+  name: "Phantom"
+  texture: DIAMOND_CHESTPLATE
+  energy: 300
+  experience: 2
+  drops:
+    - item: PHANTOM_MEMBRANE
+      chance: 1
+  recipe:
+    pattern:
+      - "MFM"
+      - "FXF"
+      - "MFM"
+    ingredient:
+      M:
+        item: PHANTOM_MEMBRANE
+        amount: 64
+      F:
+        item: FEATHER
         amount: 64
 
 iron_golem:
