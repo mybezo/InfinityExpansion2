@@ -152,8 +152,9 @@ quarry:
         NETHERITE_INGOT: 1
       # The minimum quarry tier required to produce a product (1 = basic, 2 = advanced, 3 = void, 4 = infinity).
       # Products not listed here can be produced by all quarries.
+      # Example: set NETHERITE_INGOT to 2 to only allow advanced quarry and above to produce it.
       min-tiers:
-        NETHERITE_INGOT: 2
+        NETHERITE_INGOT: 1
     nether:
       base-product: NETHERRACK
       products:
