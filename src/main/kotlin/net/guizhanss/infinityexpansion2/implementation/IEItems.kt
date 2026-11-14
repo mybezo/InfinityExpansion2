@@ -2164,7 +2164,7 @@ object IEItems : ItemRegistry(InfinityExpansion2.instance, InfinityExpansion2.lo
     }
     //</editor-fold>
 
-    //<editor-fold desc="Plus Machines" defaultstate="collapsed">
+    //<editor-fold desc="Machine Plus" defaultstate="collapsed">
     val DUST_EXTRACTOR_PLUS by buildSlimefunItem<PlusMachine>(PlusMachineType.DUST, 2, 224) {
         material = Material.SMOKER.asMaterialType()
         itemGroup = IEItemGroups.PLUS_MACHINES

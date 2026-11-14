@@ -35,7 +35,7 @@ items:
   _IG_PLUS_MACHINES:
     conditions:
       force-load: true
-    name: "&k.&bI&4E&a&l2&k. &a- &6Plus Machines"
+    name: "&k.&bI&4E&a&l2&k. &a- &6Machine Plus"
   _IG_GENERATORS:
     conditions:
       force-load: true
@@ -1200,7 +1200,7 @@ items:
       - "&8\u21E8 &e⚡ &7Speed: &b1x"
     lore-overrides:
       4: "%sftrlore_Speed_1%" # DO NOT translate this
-  # plus machines
+  # machine plus
   DUST_EXTRACTOR_PLUS:
     name: "&7Dust Extractor &6Plus"
     lore:

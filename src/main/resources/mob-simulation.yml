@@ -177,23 +177,15 @@ salmon:
   drops:
     - item: SALMON
       chance: 1
-    - item: BONE_MEAL
-      chance: 0.05
   recipe:
     pattern:
-      - "FBF"
-      - "KXK"
-      - "FBF"
+      - "FFF"
+      - "FXF"
+      - "FFF"
     ingredient:
       F:
         item: SALMON
-        amount: 64
-      B:
-        item: BONE_BLOCK
         amount: 16
-      K:
-        item: COOKED_SALMON
-        amount: 64
 
 cod:
   enabled: true
@@ -204,23 +196,15 @@ cod:
   drops:
     - item: COD
       chance: 1
-    - item: BONE_MEAL
-      chance: 0.05
   recipe:
     pattern:
-      - "FBF"
-      - "KXK"
-      - "FBF"
+      - "FFF"
+      - "FXF"
+      - "FFF"
     ingredient:
       F:
         item: COD
-        amount: 64
-      B:
-        item: BONE_BLOCK
         amount: 16
-      K:
-        item: COOKED_COD
-        amount: 64
 
 pufferfish:
   enabled: true
@@ -231,19 +215,14 @@ pufferfish:
   drops:
     - item: PUFFERFISH
       chance: 1
-    - item: BONE_MEAL
-      chance: 0.05
   recipe:
     pattern:
-      - "FBF"
-      - "BXB"
-      - "FBF"
+      - "FFF"
+      - "FXF"
+      - "FFF"
     ingredient:
       F:
         item: PUFFERFISH
-        amount: 64
-      B:
-        item: BONE_BLOCK
         amount: 16
 
 slime:
@@ -561,10 +540,10 @@ phantom:
     ingredient:
       M:
         item: PHANTOM_MEMBRANE
-        amount: 64
+        amount: 16
       F:
         item: FEATHER
-        amount: 64
+        amount: 16
 
 iron_golem:
   enabled: true
