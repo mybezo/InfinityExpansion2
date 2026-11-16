@@ -11,6 +11,7 @@ import net.guizhanss.infinityexpansion2.core.items.attributes.InformationalRecip
 import net.guizhanss.infinityexpansion2.core.menu.MenuLayout
 import net.guizhanss.infinityexpansion2.implementation.items.machines.abstracts.AbstractTickingMachine
 import net.guizhanss.infinityexpansion2.utils.items.GuiItems
+import net.guizhanss.infinityexpansion2.utils.slimefunext.pushAvailable
 import org.bukkit.World.Environment
 import org.bukkit.block.Biome
 import org.bukkit.block.Block
@@ -22,12 +23,12 @@ class GeoQuarry(
     recipeType: RecipeType,
     recipe: Array<out ItemStack?>,
     energyPerTick: Int,
-    outputInterval: Int,
+    val defaultOutputInterval: Int,
     val speed: Int, // the amount of output
 ) : AbstractTickingMachine(itemGroup, itemStack, recipeType, recipe, MenuLayout.OUTPUT_ONLY, energyPerTick),
     InformationalRecipeDisplayItem {
 
-    private val outputIntervalSetting = IntRangeSetting(this, "output-interval", 1, outputInterval, 3600)
+    private val outputIntervalSetting = IntRangeSetting(this, "output-interval", 1, defaultOutputInterval, 3600)
 
     init {
         addItemSetting(outputIntervalSetting)
@@ -37,8 +38,10 @@ class GeoQuarry(
         menu.setStatus { GuiItems.PRODUCING }
         if (!shouldProduce()) return true
 
-        produce(menu).let {
-            menu.pushItem(it.edit { amount(speed) }, *outputSlots)
+        val product = produce(menu) ?: return true
+        if (menu.pushAvailable(product, speed.toLong() * multiplier, outputSlots) == 0L) {
+            menu.setStatus { GuiItems.NO_ROOM }
+            return false
         }
 
         return true
@@ -47,11 +50,11 @@ class GeoQuarry(
     private fun shouldProduce() =
         tickCount % (getCustomTickRate() * outputIntervalSetting.value) == 0
 
-    private fun produce(menu: BlockMenu): ItemStack {
+    private fun produce(menu: BlockMenu): ItemStack? {
         val biome = menu.location.block.biome
         val env = menu.location.world.environment
 
-        return getProductPool(biome, env).random()
+        return getProductPool(biome, env).randomOrNull()
     }
 
     private fun getProductPool(biome: Biome, env: Environment): List<ItemStack> =

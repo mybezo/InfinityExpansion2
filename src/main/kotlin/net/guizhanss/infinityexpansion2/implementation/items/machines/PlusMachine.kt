@@ -11,6 +11,7 @@ import net.guizhanss.infinityexpansion2.core.items.attributes.InformationalRecip
 import net.guizhanss.infinityexpansion2.core.menu.MenuLayout
 import net.guizhanss.infinityexpansion2.implementation.items.machines.abstracts.AbstractTickingMachine
 import net.guizhanss.infinityexpansion2.utils.items.GuiItems
+import net.guizhanss.infinityexpansion2.utils.slimefunext.pushAvailable
 import org.bukkit.Material
 import org.bukkit.block.Block
 import org.bukkit.inventory.ItemStack
@@ -36,14 +37,13 @@ class PlusMachine(
     }
 
     override fun process(b: Block, menu: BlockMenu): Boolean {
-        val output = products.random().clone()
-        if (!menu.fits(output, *outputSlots)) {
+        val output = products.random()
+        if (menu.pushAvailable(output, output.amount.toLong() * multiplier, outputSlots) == 0L) {
             menu.setStatus { GuiItems.NO_ROOM }
             return false
         }
 
         menu.setStatus { GuiItems.PRODUCING }
-        menu.pushItem(output, *outputSlots)
         return true
     }
 

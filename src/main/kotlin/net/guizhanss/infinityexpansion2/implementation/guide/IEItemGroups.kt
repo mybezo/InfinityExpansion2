@@ -27,6 +27,7 @@ object IEItemGroups {
     val GEAR = createSubGroup("gear", Material.DIAMOND_CHESTPLATE.asMaterialType())
     val MACHINES = createSubGroup("machines", Material.LOOM.asMaterialType())
     val PLUS_MACHINES = createSubGroup("plus_machines", Material.SMOKER.asMaterialType())
+    val COMPRESSED_MACHINES = createSubGroup("compressed_machines", Material.PISTON.asMaterialType())
     val GENERATORS = createSubGroup("generators", Material.BLAST_FURNACE.asMaterialType())
     val MOB_SIMULATION = createSubGroup("mob_simulation", Material.BEACON.asMaterialType())
     val STORAGE = createSubGroup("storage", Material.BEEHIVE.asMaterialType())
@@ -43,6 +44,11 @@ object IEItemGroups {
             GEAR,
             MACHINES,
             PLUS_MACHINES,
+        )
+        if (InfinityExpansion2.configService.compressedConfig.getBoolean("enabled")) {
+            MAIN.addSubGroups(COMPRESSED_MACHINES)
+        }
+        MAIN.addSubGroups(
             GENERATORS,
             MOB_SIMULATION,
             STORAGE,

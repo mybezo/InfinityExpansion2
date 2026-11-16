@@ -116,6 +116,12 @@ internal object GuiItems {
         "recipes"
     )
 
+    fun multiplier(multiplier: Int) = InfinityExpansion2.localization.getGuiItem(
+        Material.PISTON.asMaterialType(),
+        "multiplier",
+        "&7x${multiplier}"
+    )
+
     fun tickRate(tickRate: Int) = InfinityExpansion2.localization.getGuiItem(
         Material.CLOCK.asMaterialType(),
         "tick_rate",

@@ -14,6 +14,7 @@ import net.guizhanss.infinityexpansion2.utils.slimefunext.MutableRecipes
 import net.guizhanss.infinityexpansion2.utils.slimefunext.RecipeInput
 import net.guizhanss.infinityexpansion2.utils.slimefunext.RecipeOutput
 import net.guizhanss.infinityexpansion2.utils.slimefunext.Recipes
+import net.guizhanss.infinityexpansion2.utils.slimefunext.pushAll
 import net.guizhanss.infinityexpansion2.utils.slimefunext.toDisplayRecipe
 import org.bukkit.block.Block
 import org.bukkit.inventory.ItemStack
@@ -46,6 +47,8 @@ open class HopperMachine(
     }
 
     override fun process(b: Block, menu: BlockMenu): Boolean {
+        if (multiplier > 1) return processMultiplied(menu)
+
         for (slot in inputSlots) {
             val input = menu.getItemInSlot(slot) ?: continue
             recipes.forEach { (recipeInput, recipeOutput) ->
@@ -62,6 +65,46 @@ open class HopperMachine(
                     menu.setStatus { GuiItems.PRODUCING }
                     return true
                 }
+            }
+        }
+
+        menu.setStatus { GuiItems.INVALID_INPUT }
+        return false
+    }
+
+    /**
+     * Process for compressed machines, the input can be taken from multiple input slots,
+     * since the required amount can be larger than a stack.
+     */
+    private fun processMultiplied(menu: BlockMenu): Boolean {
+        for (slot in inputSlots) {
+            val input = menu.getItemInSlot(slot) ?: continue
+            recipes.forEach { (recipeInput, recipeOutput) ->
+                if (!SlimefunUtils.isItemSimilar(input, recipeInput, false, false)) return@forEach
+
+                val required = recipeInput.amount.toLong() * multiplier
+                val matchingSlots = inputSlots.filter {
+                    val item = menu.getItemInSlot(it)
+                    item != null && SlimefunUtils.isItemSimilar(item, recipeInput, false, false)
+                }
+                val available = matchingSlots.sumOf { menu.getItemInSlot(it).amount.toLong() }
+                if (available < required) return@forEach
+
+                val outputs = recipeOutput.map { it to it.amount.toLong() * multiplier }
+                if (!menu.pushAll(outputs, outputSlots)) {
+                    menu.setStatus { GuiItems.NO_ROOM }
+                    return false
+                }
+
+                var remaining = required
+                for (matchingSlot in matchingSlots) {
+                    if (remaining <= 0) break
+                    val amount = menu.getItemInSlot(matchingSlot).amount.toLong().coerceAtMost(remaining)
+                    menu.consumeItem(matchingSlot, amount.toInt())
+                    remaining -= amount
+                }
+                menu.setStatus { GuiItems.PRODUCING }
+                return true
             }
         }
 

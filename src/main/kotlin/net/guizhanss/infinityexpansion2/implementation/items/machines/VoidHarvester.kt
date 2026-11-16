@@ -18,6 +18,7 @@ import net.guizhanss.infinityexpansion2.core.menu.MenuLayout
 import net.guizhanss.infinityexpansion2.implementation.IEItems
 import net.guizhanss.infinityexpansion2.implementation.items.machines.abstracts.AbstractTickingMachine
 import net.guizhanss.infinityexpansion2.utils.items.GuiItems
+import net.guizhanss.infinityexpansion2.utils.slimefunext.pushAvailable
 import org.bukkit.block.Block
 import org.bukkit.inventory.ItemStack
 
@@ -44,27 +45,29 @@ class VoidHarvester(
 
     override fun process(b: Block, menu: BlockMenu): Boolean {
         val progress = b.getInt(PROGRESS)
+        val increase = speed.toLong() * multiplier
 
-        // has reached the total progress
+        // has reached the total progress (may be reached multiple times by compressed machines)
         if (progress >= totalProgress) {
-            val output = IEItems.VOID_BIT.toItem()
+            val count = progress.toLong() / totalProgress
 
-            if (!menu.fits(output, *layout.outputSlots)) {
+            val pushed = menu.pushAvailable(IEItems.VOID_BIT.toItem(), count, layout.outputSlots)
+            if (pushed == 0L) {
                 menu.setStatus { GuiItems.NO_ROOM }
                 return false
             }
 
-            menu.pushItem(output.clone(), *layout.outputSlots)
-            menu.setProgress(speed + progress - totalProgress)
+            menu.setProgress(progress - pushed * totalProgress + increase)
         } else {
-            menu.setProgress(progress + speed)
+            menu.setProgress(progress + increase)
         }
         return true
     }
 
-    private fun BlockMenu.setProgress(progress: Int) {
+    private fun BlockMenu.setProgress(value: Long) {
+        val progress = value.coerceIn(0, Int.MAX_VALUE.toLong()).toInt()
         location.setInt(PROGRESS, progress)
-        setStatus { GuiItems.progressBar(progress, totalProgress) }
+        setStatus { GuiItems.progressBar(progress.coerceAtMost(totalProgress), totalProgress) }
     }
 
     override fun getDefaultDisplayRecipes() = listOf(IEItems.VOID_BIT.toItem())
@@ -72,7 +75,7 @@ class VoidHarvester(
     override fun getInfoItems() = listOf(
         GuiItems.tickRate(getCustomTickRate()),
         GuiItems.energyConsumptionPerTick(getEnergyConsumptionPerTick()),
-        GuiItems.increaseProgress(speed).edit { amount(speed) },
+        (speed * multiplier).let { GuiItems.increaseProgress(it).edit { amount(it.coerceIn(1, 64)) } },
         GuiItems.totalProgress(totalProgress),
     )
 

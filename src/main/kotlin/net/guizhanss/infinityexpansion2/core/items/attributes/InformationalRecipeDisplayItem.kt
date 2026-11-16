@@ -2,6 +2,8 @@ package net.guizhanss.infinityexpansion2.core.items.attributes
 
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem
 import net.guizhanss.infinityexpansion2.InfinityExpansion2
+import net.guizhanss.infinityexpansion2.implementation.items.machines.abstracts.AbstractTickingMachine
+import net.guizhanss.infinityexpansion2.utils.items.GuiItems
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.jetbrains.annotations.ApiStatus
@@ -35,6 +37,10 @@ interface InformationalRecipeDisplayItem : RecipeDisplayItem {
     @ApiStatus.NonExtendable
     override fun getDisplayRecipes(): List<ItemStack?> {
         val result = ArrayList(getInfoItems())
+        val multiplier = (this as? AbstractTickingMachine)?.multiplier ?: 1
+        if (multiplier > 1) {
+            result.add(GuiItems.multiplier(multiplier))
+        }
         if (result.size % 2 != 0) {
             result.add(null)
         }

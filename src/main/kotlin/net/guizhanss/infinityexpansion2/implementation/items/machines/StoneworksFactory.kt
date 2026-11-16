@@ -22,6 +22,7 @@ import net.guizhanss.infinityexpansion2.core.items.attributes.InformationalRecip
 import net.guizhanss.infinityexpansion2.core.menu.MenuLayout
 import net.guizhanss.infinityexpansion2.implementation.items.machines.abstracts.AbstractTickingMachine
 import net.guizhanss.infinityexpansion2.utils.items.GuiItems
+import net.guizhanss.infinityexpansion2.utils.slimefunext.pushAvailable
 import org.bukkit.Material
 import org.bukkit.block.Block
 import org.bukkit.inventory.ItemStack
@@ -33,8 +34,18 @@ class StoneworksFactory(
     recipe: Array<out ItemStack?>,
     val speed: Int,
     energyPerTick: Int,
-) : AbstractTickingMachine(itemGroup, itemStack, recipeType, recipe, MenuLayout.STONEWORKS_FACTORY, energyPerTick),
+    layout: MenuLayout,
+) : AbstractTickingMachine(itemGroup, itemStack, recipeType, recipe, layout, energyPerTick),
     InformationalRecipeDisplayItem, CustomWikiItem {
+
+    constructor(
+        itemGroup: ItemGroup,
+        itemStack: SlimefunItemStack,
+        recipeType: RecipeType,
+        recipe: Array<out ItemStack?>,
+        speed: Int,
+        energyPerTick: Int,
+    ) : this(itemGroup, itemStack, recipeType, recipe, speed, energyPerTick, MenuLayout.STONEWORKS_FACTORY)
 
     override val wikiUrl = "machines/stoneworks-factory"
 
@@ -70,6 +81,8 @@ class StoneworksFactory(
     }
 
     override fun process(b: Block, menu: BlockMenu): Boolean {
+        if (multiplier > 1) return processCompressed(menu)
+
         menu.setStatus { GuiItems.PRODUCING }
 
         val tick = tickCount / getCustomTickRate() % (CHOICE_SLOTS.size + 1)
@@ -79,6 +92,31 @@ class StoneworksFactory(
             process(menu, tick)
         }
 
+        return true
+    }
+
+    /**
+     * Compressed machines do not move items between the intermediate slots (they are limited by the stack size),
+     * the whole chain is calculated directly and only the final product is pushed.
+     * It produces at the same cadence as the normal factory (once every 4 operations).
+     */
+    private fun processCompressed(menu: BlockMenu): Boolean {
+        val tick = tickCount / getCustomTickRate() % (CHOICE_SLOTS.size + 1)
+        if (tick != CHOICE_SLOTS.size) {
+            menu.setStatus { GuiItems.PRODUCING }
+            return true
+        }
+
+        var material = Material.COBBLESTONE
+        for (index in CHOICE_SLOTS.indices) {
+            material = menu.getChoice(index).map[material] ?: material
+        }
+
+        if (menu.pushAvailable(material.toItem(), speed.toLong() * multiplier, layout.outputSlots) == 0L) {
+            menu.setStatus { GuiItems.NO_ROOM }
+            return false
+        }
+        menu.setStatus { GuiItems.PRODUCING }
         return true
     }
 

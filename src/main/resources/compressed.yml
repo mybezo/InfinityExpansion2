@@ -1,0 +1,63 @@
+# Compressed Machine settings
+# A compressed machine combines multiple machines into one.
+# Its input, output and energy consumption are multiplied by the multiplier.
+#
+# Recipes (Compressor):
+#   x8  = 8 of the original machine
+#   x16 = 2 of the x8 machine
+#   x32 = 2 of the x16 machine
+#   x64 = 2 of the x32 machine
+#
+# Changes require a server restart.
+# Missing options are added automatically, existing values are kept.
+
+# Enable/disable all the compressed machines
+enabled: true
+
+# Enable/disable each multiplier.
+# Disabling a multiplier also disables all the multipliers above it,
+# because their recipes need the previous multiplier.
+multipliers:
+  x8: true
+  x16: true
+  x32: true
+  x64: true
+
+# Enable/disable the compressed versions (all multipliers) of each machine
+machines:
+  QUARRY: true
+  QUARRY_2: true
+  QUARRY_3: true
+  QUARRY_4: true
+  GEO_QUARRY: true
+  GEO_QUARRY_2: true
+  VIRTUAL_FARM: true
+  VIRTUAL_FARM_2: true
+  VIRTUAL_FARM_3: true
+  VIRTUAL_FARM_4: true
+  TREE_GROWER: true
+  TREE_GROWER_2: true
+  TREE_GROWER_3: true
+  TREE_GROWER_4: true
+  FLOWER_GROWER: true
+  FLOWER_GROWER_2: true
+  FLOWER_GROWER_3: true
+  FLOWER_GROWER_4: true
+  VOID_HARVESTER: true
+  VOID_HARVESTER_2: true
+  VOID_HARVESTER_3: true
+  STONEWORKS_FACTORY: true
+  STONEWORKS_FACTORY_2: true
+  STONEWORKS_FACTORY_3: true
+  STONEWORKS_FACTORY_4: true
+  MOB_SIMULATION_CHAMBER: true
+  URANIUM_EXTRACTOR: true
+  URANIUM_INGOT_EXTRACTOR: true
+  DUST_EXTRACTOR_PLUS: true
+  DUST_EXTRACTOR_PLUS_2: true
+  DUST_EXTRACTOR_PLUS_3: true
+  DUST_EXTRACTOR_PLUS_4: true
+  INGOT_FORMER_PLUS: true
+  INGOT_FORMER_PLUS_2: true
+  INGOT_FORMER_PLUS_3: true
+  INGOT_FORMER_PLUS_4: true

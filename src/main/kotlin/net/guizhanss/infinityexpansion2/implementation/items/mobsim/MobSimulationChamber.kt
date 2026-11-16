@@ -24,6 +24,7 @@ import net.guizhanss.infinityexpansion2.core.items.attributes.InformationalRecip
 import net.guizhanss.infinityexpansion2.core.menu.MenuLayout
 import net.guizhanss.infinityexpansion2.implementation.items.machines.abstracts.AbstractTickingMachine
 import net.guizhanss.infinityexpansion2.utils.items.GuiItems
+import net.guizhanss.infinityexpansion2.utils.slimefunext.pushAvailable
 import org.bukkit.Sound
 import org.bukkit.block.Block
 import org.bukkit.inventory.ItemStack
@@ -99,7 +100,8 @@ class MobSimulationChamber(
         }
 
         // handle stackable
-        val amount = if (InfinityExpansion2.configService.mobSimAllowStackedCard.value) cardAmount else 1
+        // compressed machines simulate multiple chambers at once
+        val amount = (if (InfinityExpansion2.configService.mobSimAllowStackedCard.value) cardAmount else 1) * multiplier
         if (props.energy < 0 || amount <= 0) {
             menu.setStatus { GuiItems.NO_POWER }
             menu.setEnergyConsumption(0)
@@ -123,15 +125,24 @@ class MobSimulationChamber(
         menu.replaceExistingItem(XP_SLOT, GuiItems.experience(currentXp))
 
         if (tickCount % (InfinityExpansion2.configService.mobSimInterval.value * getCustomTickRate()) == 0) {
-            val xp = floor(props.experience * InfinityExpansion2.configService.mobSimExpMultiplier.value).toInt()
+            val xp = floor(
+                props.experience * InfinityExpansion2.configService.mobSimExpMultiplier.value * multiplier
+            ).toLong().coerceIn(0, Int.MAX_VALUE.toLong()).toInt()
 
             if (InfinityExpansion2.configService.mobSimLegacyOutput.value) {
                 val output = props.getRandomDrop()
-                if (!menu.fits(output, *outputSlots)) {
+                if (menu.pushAvailable(output, output.amount.toLong() * multiplier, outputSlots) == 0L) {
                     menu.setStatus { GuiItems.NO_ROOM }
                     return false
                 }
-                menu.pushItem(output.clone(), *outputSlots)
+            } else if (multiplier > 1) {
+                // compressed: roll each drop once, multiply, and push as much as fits
+                val drops = props.drops.filter { (_, chance) -> Random.nextDouble() <= chance }
+                    .map { (item, _) -> item to item.amount.toLong() * amount }
+                if (drops.isNotEmpty() && menu.pushAvailable(drops, outputSlots).all { it == 0L }) {
+                    menu.setStatus { GuiItems.NO_ROOM }
+                    return false
+                }
             } else {
                 val selectedDrops = mutableListOf<Pair<ItemStack, Long>>()
                 var outputStackCount = 0L

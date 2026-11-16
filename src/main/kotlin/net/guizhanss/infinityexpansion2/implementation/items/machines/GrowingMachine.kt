@@ -15,6 +15,7 @@ import net.guizhanss.infinityexpansion2.utils.slimefunext.MutableRecipes
 import net.guizhanss.infinityexpansion2.utils.slimefunext.RecipeInput
 import net.guizhanss.infinityexpansion2.utils.slimefunext.RecipeOutput
 import net.guizhanss.infinityexpansion2.utils.slimefunext.Recipes
+import net.guizhanss.infinityexpansion2.utils.slimefunext.pushAvailable
 import net.guizhanss.infinityexpansion2.utils.slimefunext.toDisplayRecipe
 import org.bukkit.block.Block
 import org.bukkit.inventory.ItemStack
@@ -25,11 +26,11 @@ open class GrowingMachine(
     recipeType: RecipeType,
     recipe: Array<out ItemStack?>,
     energyPerTick: Int,
-    outputInterval: Int,
+    val defaultOutputInterval: Int,
 ) : AbstractTickingMachine(itemGroup, itemStack, recipeType, recipe, MenuLayout.SINGLE_INPUT, energyPerTick),
     InformationalRecipeDisplayItem {
 
-    private val outputIntervalSetting = IntRangeSetting(this, "output-interval", 1, outputInterval, 3600)
+    private val outputIntervalSetting = IntRangeSetting(this, "output-interval", 1, defaultOutputInterval, 3600)
 
     init {
         addItemSetting(outputIntervalSetting)
@@ -65,7 +66,11 @@ open class GrowingMachine(
 
         menu.setStatus { GuiItems.PRODUCING }
         if (shouldProduce()) {
-            output.forEach { menu.pushItem(it.clone(), *outputSlots) }
+            val outputs = output.map { it to it.amount.toLong() * multiplier }
+            if (menu.pushAvailable(outputs, outputSlots).all { it == 0L }) {
+                menu.setStatus { GuiItems.NO_ROOM }
+                return false
+            }
         }
         return true
     }

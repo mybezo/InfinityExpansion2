@@ -111,6 +111,16 @@ class ConfigService(plugin: InfinityExpansion2) {
         reload()
     }
 
+    internal val compressedConfig = Config(plugin, "compressed.yml")
+
+    init {
+        if (!compressedConfig.file.exists()) {
+            plugin.saveResource("compressed.yml", false)
+            compressedConfig.reload()
+        }
+        compressedConfig.setDefaultValue("enabled", true)
+    }
+
     fun reload() {
         config.reload()
         mobSimConfig.reload()

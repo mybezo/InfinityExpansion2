@@ -24,8 +24,8 @@ abstract class AbstractTickingMachine(
     itemStack: SlimefunItemStack,
     recipeType: RecipeType,
     recipe: Array<out ItemStack?>,
-    protected val layout: MenuLayout,
-    energyPerTick: Int,
+    val layout: MenuLayout,
+    val defaultEnergyPerTick: Int,
     tickRate: Int = 1,
 ) : TickingMenuBlock(itemGroup, itemStack, recipeType, recipe), EnergyNetComponent, EnergyTickingConsumer,
     CustomTickRateMachine {
@@ -34,11 +34,19 @@ abstract class AbstractTickingMachine(
     protected val tickRateSetting = IntRangeSetting(this, "tick-rate", 1, tickRate, 3600)
 
     // should avoid accessing this directly, use getEnergyConsumptionPerTick() instead
-    protected val energyPerTickSetting = IntRangeSetting(this, "energy-per-tick", 1, energyPerTick, 1_000_000_000)
+    protected val energyPerTickSetting = IntRangeSetting(this, "energy-per-tick", 1, defaultEnergyPerTick, 1_000_000_000)
 
     init {
         addItemSetting(tickRateSetting, energyPerTickSetting)
     }
+
+    /**
+     * The amount of machines combined into this machine (compressed machines).
+     * Every operation produces (and consumes) this many times the normal amount.
+     * It is 1 for normal machines, and must only be changed before the item is registered.
+     */
+    var multiplier: Int = 1
+        internal set
 
     override fun getCustomTickRate() = tickRateSetting.value
 
