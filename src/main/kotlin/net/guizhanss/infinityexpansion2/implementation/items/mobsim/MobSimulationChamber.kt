@@ -100,8 +100,12 @@ class MobSimulationChamber(
         }
 
         // handle stackable
-        // compressed machines simulate multiple chambers at once
-        val amount = (if (InfinityExpansion2.configService.mobSimAllowStackedCard.value) cardAmount else 1) * multiplier
+        // compressed chambers always use the stacked cards, up to the multiplier (1 card = 1 chamber)
+        val amount = when {
+            multiplier > 1 -> cardAmount.coerceAtMost(multiplier)
+            InfinityExpansion2.configService.mobSimAllowStackedCard.value -> cardAmount
+            else -> 1
+        }
         if (props.energy < 0 || amount <= 0) {
             menu.setStatus { GuiItems.NO_POWER }
             menu.setEnergyConsumption(0)
@@ -109,7 +113,13 @@ class MobSimulationChamber(
         }
 
         // Energy consumption is non-negative here; only the upper bound needs clamping.
-        val energy = (getEnergyConsumptionPerTick().toLong() + props.energy.toLong() * amount)
+        // compressed chambers only pay the base energy of the chambers in use
+        val baseEnergy = if (multiplier > 1) {
+            getEnergyConsumptionPerTick().toLong() / multiplier * amount
+        } else {
+            getEnergyConsumptionPerTick().toLong()
+        }
+        val energy = (baseEnergy + props.energy.toLong() * amount)
             .coerceAtMost(Int.MAX_VALUE.toLong())
             .toInt()
 
@@ -126,12 +136,14 @@ class MobSimulationChamber(
 
         if (tickCount % (InfinityExpansion2.configService.mobSimInterval.value * getCustomTickRate()) == 0) {
             val xp = floor(
-                props.experience * InfinityExpansion2.configService.mobSimExpMultiplier.value * multiplier
+                props.experience * InfinityExpansion2.configService.mobSimExpMultiplier.value *
+                    (if (multiplier > 1) amount else 1)
             ).toLong().coerceIn(0, Int.MAX_VALUE.toLong()).toInt()
 
             if (InfinityExpansion2.configService.mobSimLegacyOutput.value) {
                 val output = props.getRandomDrop()
-                if (menu.pushAvailable(output, output.amount.toLong() * multiplier, outputSlots) == 0L) {
+                val outputAmount = output.amount.toLong() * (if (multiplier > 1) amount else 1)
+                if (menu.pushAvailable(output, outputAmount, outputSlots) == 0L) {
                     menu.setStatus { GuiItems.NO_ROOM }
                     return false
                 }
