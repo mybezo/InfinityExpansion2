@@ -87,6 +87,12 @@ class MobDataCard(
             )
             val meta = item.itemMeta
             PersistentDataAPI.setString(meta, Keys.MOB_DATA_ID, id)
+            // the textures are usually armors (not stackable), allow cards to stack (1.20.5+)
+            try {
+                meta.setMaxStackSize(64)
+            } catch (_: NoSuchMethodError) {
+                // not supported on this server version
+            }
             item.itemMeta = meta
             return item
         }
