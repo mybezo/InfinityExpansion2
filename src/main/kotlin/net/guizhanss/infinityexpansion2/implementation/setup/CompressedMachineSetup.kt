@@ -280,7 +280,7 @@ internal object CompressedMachineSetup {
             var previous: SlimefunItemStack = entry.base
             var previousMultiplier = 1
             for (multiplier in multipliers) {
-                val sfis = createItemStack(entry, multiplier)
+                val sfis = createItemStack(entry, baseItem, multiplier)
                 val recipe = arrayOfNulls<ItemStack>(9).apply {
                     this[0] = previous.toItem().apply { amount = multiplier / previousMultiplier }
                 }
@@ -300,12 +300,18 @@ internal object CompressedMachineSetup {
         InfinityExpansion2.log(Level.INFO, "Registered $count compressed machines.")
     }
 
-    private fun createItemStack(entry: Entry, multiplier: Int): SlimefunItemStack {
+    private fun createItemStack(entry: Entry, baseItem: SlimefunItem, multiplier: Int): SlimefunItemStack {
         val localization = InfinityExpansion2.localization
         val name = ChatUtil.color(
             "${localization.getItemName(entry.id)} &a(x$multiplier)"
         )
-        val lore = (localization.getItemLore(entry.id) + "" + localization.getLore("compressed", multiplier))
+        // the lore names the kind of item that is combined
+        val loreId = when {
+            baseItem is Capacitor -> "compressed-capacitor"
+            entry.category == Category.GENERATOR -> "compressed-generator"
+            else -> "compressed-machine"
+        }
+        val lore = (localization.getItemLore(entry.id) + "" + localization.getLore(loreId, multiplier))
             .map { ChatUtil.color(it) }
 
         val item = entry.base.toItem()
