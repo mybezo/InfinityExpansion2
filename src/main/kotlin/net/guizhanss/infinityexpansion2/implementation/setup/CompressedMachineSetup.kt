@@ -259,20 +259,10 @@ internal object CompressedMachineSetup {
         InfinityExpansion2.log(Level.INFO, "Registered $count compressed machines.")
     }
 
-    /**
-     * The color of the multiplier text in the item name.
-     */
-    private fun multiplierColor(multiplier: Int) = when (multiplier) {
-        8 -> "&a"
-        16 -> "&e"
-        32 -> "&6"
-        else -> "&d"
-    }
-
     private fun createItemStack(entry: Entry, multiplier: Int): SlimefunItemStack {
         val localization = InfinityExpansion2.localization
         val name = ChatUtil.color(
-            "${localization.getItemName(entry.id)} ${multiplierColor(multiplier)}(x$multiplier)"
+            "${localization.getItemName(entry.id)} &a(x$multiplier)"
         )
         val lore = (localization.getItemLore(entry.id) + "" + localization.getLore("compressed", multiplier))
             .map { ChatUtil.color(it) }
