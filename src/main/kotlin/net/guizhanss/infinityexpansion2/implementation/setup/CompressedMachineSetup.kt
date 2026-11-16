@@ -15,7 +15,6 @@ import net.guizhanss.infinityexpansion2.implementation.guide.IEItemGroups
 import net.guizhanss.infinityexpansion2.implementation.items.generators.EnergyGenerator
 import net.guizhanss.infinityexpansion2.implementation.items.generators.InfinityReactor
 import net.guizhanss.infinityexpansion2.implementation.items.generators.InfinitySingularityReactor
-import net.guizhanss.infinityexpansion2.implementation.items.machines.CompressedStoneworksFactory
 import net.guizhanss.infinityexpansion2.implementation.items.machines.FlowerGrower
 import net.guizhanss.infinityexpansion2.implementation.items.machines.GeoQuarry
 import net.guizhanss.infinityexpansion2.implementation.items.machines.PlusMachine
@@ -165,7 +164,7 @@ internal object CompressedMachineSetup {
             IEItems.STONEWORKS_FACTORY_3, IEItems.STONEWORKS_FACTORY_4
         ).forEach { base ->
             add<StoneworksFactory>(base) { a, m ->
-                CompressedStoneworksFactory(a.itemGroup, a.itemStack, a.recipeType, a.recipe, m.speed, a.energy(m))
+                StoneworksFactory(a.itemGroup, a.itemStack, a.recipeType, a.recipe, m.speed, a.energy(m))
             }
         }
 
