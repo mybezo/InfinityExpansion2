@@ -8,6 +8,9 @@
 #   x32 = 2 of the x16 machine
 #   x64 = 2 of the x32 machine
 #
+# Only the highest enabled multiplier is listed in the guide,
+# the lower multipliers are still craftable (click them in the recipe to view).
+#
 # Changes require a server restart.
 # Missing options are added automatically, existing values are kept.
 

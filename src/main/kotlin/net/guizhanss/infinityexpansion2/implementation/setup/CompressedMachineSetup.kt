@@ -38,6 +38,16 @@ internal object CompressedMachineSetup {
     val MULTIPLIERS = intArrayOf(8, 16, 32, 64)
 
     /**
+     * The color of the multiplier text in the item name.
+     */
+    private fun multiplierColor(multiplier: Int) = when (multiplier) {
+        8 -> "&a"
+        16 -> "&e"
+        32 -> "&6"
+        else -> "&d"
+    }
+
+    /**
      * The arguments to construct a compressed machine.
      */
     class Args(
@@ -181,7 +191,13 @@ internal object CompressedMachineSetup {
                 }
                 val energy = (baseItem.defaultEnergyPerTick.toLong() * multiplier)
                     .coerceAtMost(1_000_000_000L).toInt()
-                val args = Args(IEItemGroups.COMPRESSED_MACHINES, sfis, RecipeType.COMPRESSOR, recipe, energy)
+                // only the highest multiplier is listed in the guide, the lower ones are still craftable
+                val group = if (multiplier == multipliers.last()) {
+                    IEItemGroups.COMPRESSED_MACHINES
+                } else {
+                    IEItemGroups.HIDDEN
+                }
+                val args = Args(group, sfis, RecipeType.COMPRESSOR, recipe, energy)
 
                 val machine = entry.factory(args, baseItem) ?: return@entry
                 machine.multiplier = multiplier
@@ -197,7 +213,7 @@ internal object CompressedMachineSetup {
 
     private fun createItemStack(entry: Entry, multiplier: Int): SlimefunItemStack {
         val localization = InfinityExpansion2.localization
-        val name = ChatUtil.color("${localization.getItemName(entry.id)} &7(x$multiplier)")
+        val name = ChatUtil.color("${localization.getItemName(entry.id)} ${multiplierColor(multiplier)}(x$multiplier)")
         val lore = (localization.getItemLore(entry.id) + "" + localization.getLore("compressed", multiplier))
             .map { ChatUtil.color(it) }
 
