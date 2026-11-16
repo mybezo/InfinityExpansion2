@@ -6,6 +6,7 @@ import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack
 import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType
+import net.guizhanss.guizhanlib.kt.slimefun.items.toItem
 import net.guizhanss.guizhanlib.minecraft.utils.ChatUtil
 import net.guizhanss.infinityexpansion2.InfinityExpansion2
 import net.guizhanss.infinityexpansion2.core.menu.MenuLayout
@@ -176,7 +177,7 @@ internal object CompressedMachineSetup {
             for (multiplier in multipliers) {
                 val sfis = createItemStack(entry, multiplier)
                 val recipe = arrayOfNulls<ItemStack>(9).apply {
-                    this[0] = ItemStack(previous).apply { amount = multiplier / previousMultiplier }
+                    this[0] = previous.toItem().apply { amount = multiplier / previousMultiplier }
                 }
                 val energy = (baseItem.defaultEnergyPerTick.toLong() * multiplier)
                     .coerceAtMost(1_000_000_000L).toInt()
@@ -191,7 +192,7 @@ internal object CompressedMachineSetup {
                 previousMultiplier = multiplier
             }
         }
-        InfinityExpansion2.log(Level.INFO, "Registered {0} compressed machines.", count)
+        InfinityExpansion2.log(Level.INFO, "Registered $count compressed machines.")
     }
 
     private fun createItemStack(entry: Entry, multiplier: Int): SlimefunItemStack {
@@ -200,7 +201,7 @@ internal object CompressedMachineSetup {
         val lore = (localization.getItemLore(entry.id) + "" + localization.getLore("compressed", multiplier))
             .map { ChatUtil.color(it) }
 
-        val item = ItemStack(entry.base)
+        val item = entry.base.toItem()
         item.itemMeta = item.itemMeta?.apply {
             setDisplayName(name)
             this.lore = lore
