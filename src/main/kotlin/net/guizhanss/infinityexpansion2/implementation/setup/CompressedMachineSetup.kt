@@ -48,6 +48,10 @@ internal object CompressedMachineSetup {
 
     val MULTIPLIERS = intArrayOf(8, 16, 32, 64)
 
+    // numbers in the lore that are multiplied: energy (J/t), capacity (J Capacity) and speed (Slimefun machines only)
+    private val ENERGY_PATTERN = Regex("""((?:[&§].)*)(\d[\d,]*)(?= J)""")
+    private val SPEED_PATTERN = Regex("""(Speed: (?:[&§].)*)(\d+)x""")
+
     // max values of the energy item settings
     private const val MAX_MACHINE_ENERGY = 1_000_000_000L
     private const val MAX_GENERATOR_ENERGY = 16_777_215L
@@ -300,10 +304,6 @@ internal object CompressedMachineSetup {
         }
         InfinityExpansion2.log(Level.INFO, "Registered $count compressed machines.")
     }
-
-    // numbers in the lore that are multiplied: energy (J/t), capacity (J Capacity) and speed (Slimefun machines only)
-    private val ENERGY_PATTERN = Regex("""((?:[&§].)*)(\d[\d,]*)(?= J)""")
-    private val SPEED_PATTERN = Regex("""(Speed: (?:[&§].)*)(\d+)x""")
 
     /**
      * Multiply the energy and capacity numbers in a lore line,
