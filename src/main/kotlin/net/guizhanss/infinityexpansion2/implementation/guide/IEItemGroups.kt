@@ -86,7 +86,7 @@ object IEItemGroups {
     private const val COMPRESSED_ITEMS_SLOT = 40
 
     // the head texture of the "Compressed Items" icon (Mybezo's skin), empty to use a default player head
-    private const val COMPRESSED_ITEMS_TEXTURE = ""
+    private const val COMPRESSED_ITEMS_TEXTURE = "82600941fab88efc41bb132d873d3b5c5f35f7720ebd9375476c1a18955bb03e"
 
     private fun createSubGroup(key: String, material: MaterialType) = SubGroup(
         ie2Key(key),
