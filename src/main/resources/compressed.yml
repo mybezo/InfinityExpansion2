@@ -65,6 +65,18 @@ machines:
   INGOT_FORMER_PLUS_2: true
   INGOT_FORMER_PLUS_3: true
   INGOT_FORMER_PLUS_4: true
+  ADVANCED_SMELTERY: true
+  VOID_SMELTERY: true
+  ADVANCED_ENCHANTER: true
+  INFINITY_ENCHANTER: true
+  ADVANCED_DISENCHANTER: true
+  INFINITY_DISENCHANTER: true
+  ADVANCED_CHARGER: true
+  INFINITY_CHARGER: true
+  ADVANCED_GEO_MINER: true
+  VOID_CAPACITOR: true
+  # Infinity Capacitor only goes up to x16 (the energy capacity limit)
+  INFINITY_CAPACITOR: true
 
 # Enable/disable the compressed versions (all multipliers) of each generator
 # Note: Infinity Singularity Reactor only goes up to x32.

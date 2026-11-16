@@ -28,6 +28,12 @@ import net.guizhanss.infinityexpansion2.implementation.items.machines.VirtualFar
 import net.guizhanss.infinityexpansion2.implementation.items.machines.VoidHarvester
 import net.guizhanss.infinityexpansion2.implementation.items.machines.abstracts.AbstractTickingMachine
 import net.guizhanss.infinityexpansion2.implementation.items.mobsim.MobSimulationChamber
+import net.guizhanss.infinityexpansion2.implementation.items.sfextension.AutoDisenchanter
+import net.guizhanss.infinityexpansion2.implementation.items.sfextension.AutoEnchanter
+import net.guizhanss.infinityexpansion2.implementation.items.sfextension.Capacitor
+import net.guizhanss.infinityexpansion2.implementation.items.sfextension.ChargingBench
+import net.guizhanss.infinityexpansion2.implementation.items.sfextension.GeoMiner
+import net.guizhanss.infinityexpansion2.implementation.items.sfextension.Smeltery
 import org.bukkit.inventory.ItemStack
 import java.util.logging.Level
 
@@ -103,6 +109,7 @@ internal object CompressedMachineSetup {
 
     init {
         registerMachines()
+        registerSlimefunExpansion()
         registerGenerators()
         register()
     }
@@ -187,6 +194,54 @@ internal object CompressedMachineSetup {
             }
         }
     }
+
+    /**
+     * Slimefun expansion machines are based on Slimefun's own machines,
+     * their processing speed and energy are multiplied (Slimefun handles one recipe per operation).
+     */
+    private fun registerSlimefunExpansion() {
+        add<Smeltery>(IEItems.ADVANCED_SMELTERY) { a, m ->
+            Smeltery(a.itemGroup, a.itemStack, a.recipeType, a.recipe, a.scaleSpeed(m.speed), a.scaleEnergy(m.energyConsumption))
+        }
+        add<Smeltery>(IEItems.VOID_SMELTERY) { a, m ->
+            Smeltery(a.itemGroup, a.itemStack, a.recipeType, a.recipe, a.scaleSpeed(m.speed), a.scaleEnergy(m.energyConsumption))
+        }
+        listOf(IEItems.ADVANCED_ENCHANTER, IEItems.INFINITY_ENCHANTER).forEach { base ->
+            add<AutoEnchanter>(base) { a, m ->
+                AutoEnchanter(
+                    a.itemGroup, a.itemStack, a.recipeType, a.recipe, a.scaleSpeed(m.speed), a.scaleEnergy(m.energyConsumption)
+                )
+            }
+        }
+        listOf(IEItems.ADVANCED_DISENCHANTER, IEItems.INFINITY_DISENCHANTER).forEach { base ->
+            add<AutoDisenchanter>(base) { a, m ->
+                AutoDisenchanter(
+                    a.itemGroup, a.itemStack, a.recipeType, a.recipe, a.scaleSpeed(m.speed), a.scaleEnergy(m.energyConsumption)
+                )
+            }
+        }
+        listOf(IEItems.ADVANCED_CHARGER, IEItems.INFINITY_CHARGER).forEach { base ->
+            add<ChargingBench>(base) { a, m ->
+                ChargingBench(
+                    a.itemGroup, a.itemStack, a.recipeType, a.recipe, a.scaleSpeed(m.speed), a.scaleEnergy(m.energyConsumption)
+                )
+            }
+        }
+        add<GeoMiner>(IEItems.ADVANCED_GEO_MINER) { a, m ->
+            GeoMiner(a.itemGroup, a.itemStack, a.recipeType, a.recipe, a.scaleSpeed(m.speed), a.scaleEnergy(m.energyConsumption))
+        }
+        add<Capacitor>(IEItems.VOID_CAPACITOR) { a, m ->
+            Capacitor(a.itemGroup, a.itemStack, a.recipeType, a.recipe, a.scale(m.capacity, Int.MAX_VALUE.toLong()))
+        }
+        // the capacity of x32 and x64 would exceed the integer limit
+        add<Capacitor>(IEItems.INFINITY_CAPACITOR, maxMultiplier = 16) { a, m ->
+            Capacitor(a.itemGroup, a.itemStack, a.recipeType, a.recipe, a.scale(m.capacity, Int.MAX_VALUE.toLong()))
+        }
+    }
+
+    private fun Args.scaleSpeed(speed: Int) = scale(speed, Int.MAX_VALUE.toLong())
+
+    private fun Args.scaleEnergy(energy: Int) = scale(energy, Int.MAX_VALUE.toLong())
 
     private fun registerGenerators() {
         listOf(
