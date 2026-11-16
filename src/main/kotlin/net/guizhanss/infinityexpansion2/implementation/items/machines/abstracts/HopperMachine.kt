@@ -75,6 +75,7 @@ open class HopperMachine(
     /**
      * Process for compressed machines, the input can be taken from multiple input slots,
      * since the required amount can be larger than a stack.
+     * If there is not enough input for all the combined machines, only the available amount is processed.
      */
     private fun processMultiplied(menu: BlockMenu): Boolean {
         for (slot in inputSlots) {
@@ -82,15 +83,16 @@ open class HopperMachine(
             recipes.forEach { (recipeInput, recipeOutput) ->
                 if (!SlimefunUtils.isItemSimilar(input, recipeInput, false, false)) return@forEach
 
-                val required = recipeInput.amount.toLong() * multiplier
                 val matchingSlots = inputSlots.filter {
                     val item = menu.getItemInSlot(it)
                     item != null && SlimefunUtils.isItemSimilar(item, recipeInput, false, false)
                 }
                 val available = matchingSlots.sumOf { menu.getItemInSlot(it).amount.toLong() }
-                if (available < required) return@forEach
+                val units = (available / recipeInput.amount).coerceAtMost(multiplier.toLong())
+                if (units <= 0) return@forEach
+                val required = recipeInput.amount.toLong() * units
 
-                val outputs = recipeOutput.map { it to it.amount.toLong() * multiplier }
+                val outputs = recipeOutput.map { it to it.amount.toLong() * units }
                 if (!menu.pushAll(outputs, outputSlots)) {
                     menu.setStatus { GuiItems.NO_ROOM }
                     return false
@@ -104,7 +106,8 @@ open class HopperMachine(
                     remaining -= amount
                 }
                 menu.setStatus { GuiItems.PRODUCING }
-                return true
+                consumePartialEnergy(menu, units)
+                return false
             }
         }
 

@@ -57,8 +57,26 @@ abstract class AbstractReactor(
 
     protected fun Location.getProgress() = getInt(PROGRESS_KEY)
 
+    /**
+     * The amount of combined reactors running in the current cycle (compressed reactors only),
+     * decided by the fuel available when the cycle starts.
+     */
+    protected fun Location.setUnits(units: Int) {
+        setInt(UNITS_KEY, units)
+    }
+
+    protected fun Location.getUnits() = getInt(UNITS_KEY).let { if (it <= 0) multiplier else it.coerceAtMost(multiplier) }
+
+    /**
+     * The energy produced by the reactors running in the current cycle.
+     */
+    protected fun Location.getUnitsProduction(): Int =
+        if (multiplier <= 1) getEnergyProduction()
+        else (getEnergyProduction().toLong() / multiplier * getUnits()).toInt()
+
     companion object {
 
         private const val PROGRESS_KEY = "progress"
+        private const val UNITS_KEY = "units"
     }
 }

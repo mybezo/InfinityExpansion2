@@ -81,36 +81,41 @@ class InfinityReactor(
         val infinityInput = menu.getItemInSlot(INFINITY_INPUT)
 
         if (progress == 0) { // fresh start
-            if (infinityInput == null || !infinityInput.isInfinityIngot() || infinityInput.amount < multiplier) {
+            if (infinityInput == null || !infinityInput.isInfinityIngot()) {
                 menu.setStatus { NEED_INFINITY }
                 return 0
             }
-            if (voidInput == null || !voidInput.isVoidIngot() || voidInput.amount < multiplier) {
+            if (voidInput == null || !voidInput.isVoidIngot()) {
                 menu.setStatus { NEED_VOID }
                 return 0
             }
 
+            // compressed reactors run as many reactors as the available fuel, up to the multiplier
+            val units = minOf(multiplier, voidInput.amount, infinityInput.amount)
+            l.setUnits(units)
+
             // input is valid, start new progress
-            menu.consumeItem(VOID_INPUT, multiplier)
-            menu.consumeItem(INFINITY_INPUT, multiplier)
+            menu.consumeItem(VOID_INPUT, units)
+            menu.consumeItem(INFINITY_INPUT, units)
             menu.setStatus { info(infinityIngotDurationSetting.value, voidIngotDurationSetting.value) }
             l.setProgress(1)
-            return getEnergyProduction()
+            return l.getUnitsProduction()
         }
 
         if (progress > infinityIngotDurationSetting.value) { // done
             menu.setStatus { GuiItems.PRODUCING }
             l.setProgress(0)
-            return getEnergyProduction()
+            return l.getUnitsProduction()
         }
 
         if (Math.floorMod(progress, voidIngotDurationSetting.value) == 0) { // need void
-            if (voidInput == null || !voidInput.isVoidIngot() || voidInput.amount < multiplier) {
+            val units = l.getUnits()
+            if (voidInput == null || !voidInput.isVoidIngot() || voidInput.amount < units) {
                 menu.setStatus { NEED_VOID }
                 return 0
             }
 
-            menu.consumeItem(VOID_INPUT, multiplier)
+            menu.consumeItem(VOID_INPUT, units)
         }
 
         // progressing
@@ -121,7 +126,7 @@ class InfinityReactor(
                 voidIngotDurationSetting.value - Math.floorMod(progress, voidIngotDurationSetting.value)
             )
         }
-        return getEnergyProduction()
+        return l.getUnitsProduction()
     }
 
     private fun ItemStack.isVoidIngot() = getByItem(this)?.id == IEItems.VOID_INGOT.itemId

@@ -58,24 +58,26 @@ class InfinitySingularityReactor(
         val infinitySingInput = menu.getItemInSlot(INPUT)
 
         if (progress == 0) { // fresh start
-            if (infinitySingInput == null || !infinitySingInput.isInfinitySingularity() ||
-                infinitySingInput.amount < multiplier
-            ) {
+            if (infinitySingInput == null || !infinitySingInput.isInfinitySingularity()) {
                 menu.setStatus { NEED }
                 return 0
             }
 
+            // compressed reactors run as many reactors as the available fuel, up to the multiplier
+            val units = minOf(multiplier, infinitySingInput.amount)
+            l.setUnits(units)
+
             // input is valid, start new progress
-            menu.consumeItem(INPUT, multiplier)
+            menu.consumeItem(INPUT, units)
             menu.setStatus { info(infinitySingularityDurationSetting.value) }
             l.setProgress(1)
-            return getEnergyProduction()
+            return l.getUnitsProduction()
         }
 
         if (progress > infinitySingularityDurationSetting.value) { // done
             menu.setStatus { GuiItems.PRODUCING }
             l.setProgress(0)
-            return getEnergyProduction()
+            return l.getUnitsProduction()
         }
 
         // progressing
@@ -83,7 +85,7 @@ class InfinitySingularityReactor(
         menu.setStatus {
             info(infinitySingularityDurationSetting.value - progress)
         }
-        return getEnergyProduction()
+        return l.getUnitsProduction()
     }
 
     private fun ItemStack.isInfinitySingularity() =

@@ -72,6 +72,17 @@ abstract class AbstractTickingMachine(
 
     protected abstract fun process(b: Block, menu: BlockMenu): Boolean
 
+    /**
+     * For compressed machines that only run [units] of the combined machines,
+     * consume the energy of these machines only.
+     *
+     * The process should return false after calling this, so the full energy is not consumed again.
+     */
+    protected fun consumePartialEnergy(menu: BlockMenu, units: Long) {
+        val energy = getEnergyConsumptionPerTick().toLong() / multiplier * units
+        removeCharge(menu.location, energy.coerceIn(0, Int.MAX_VALUE.toLong()).toInt())
+    }
+
     protected fun BlockMenu.setStatus(itemStack: () -> ItemStack) {
         if (hasViewer()) {
             replaceExistingItem(layout.statusSlot, itemStack())

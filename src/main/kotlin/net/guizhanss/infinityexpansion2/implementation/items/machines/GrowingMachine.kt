@@ -64,13 +64,21 @@ open class GrowingMachine(
             return false
         }
 
+        // compressed machines grow as many as the input amount, up to the multiplier
+        val units = input.amount.coerceAtMost(multiplier).toLong()
+
         menu.setStatus { GuiItems.PRODUCING }
         if (shouldProduce()) {
-            val outputs = output.map { it to it.amount.toLong() * multiplier }
+            val outputs = output.map { it to it.amount.toLong() * units }
             if (menu.pushAvailable(outputs, outputSlots).all { it == 0L }) {
                 menu.setStatus { GuiItems.NO_ROOM }
                 return false
             }
+        }
+
+        if (multiplier > 1) {
+            consumePartialEnergy(menu, units)
+            return false
         }
         return true
     }
