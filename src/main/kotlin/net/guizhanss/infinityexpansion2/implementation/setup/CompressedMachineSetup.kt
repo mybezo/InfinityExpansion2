@@ -28,8 +28,6 @@ import net.guizhanss.infinityexpansion2.implementation.items.machines.VirtualFar
 import net.guizhanss.infinityexpansion2.implementation.items.machines.VoidHarvester
 import net.guizhanss.infinityexpansion2.implementation.items.machines.abstracts.AbstractTickingMachine
 import net.guizhanss.infinityexpansion2.implementation.items.mobsim.MobSimulationChamber
-import net.guizhanss.infinityexpansion2.implementation.items.sfextension.AutoDisenchanter
-import net.guizhanss.infinityexpansion2.implementation.items.sfextension.AutoEnchanter
 import net.guizhanss.infinityexpansion2.implementation.items.sfextension.Capacitor
 import net.guizhanss.infinityexpansion2.implementation.items.sfextension.ChargingBench
 import net.guizhanss.infinityexpansion2.implementation.items.sfextension.GeoMiner
@@ -205,20 +203,6 @@ internal object CompressedMachineSetup {
         }
         add<Smeltery>(IEItems.VOID_SMELTERY) { a, m ->
             Smeltery(a.itemGroup, a.itemStack, a.recipeType, a.recipe, a.scaleSpeed(m.speed), a.scaleEnergy(m.energyConsumption))
-        }
-        listOf(IEItems.ADVANCED_ENCHANTER, IEItems.INFINITY_ENCHANTER).forEach { base ->
-            add<AutoEnchanter>(base) { a, m ->
-                AutoEnchanter(
-                    a.itemGroup, a.itemStack, a.recipeType, a.recipe, a.scaleSpeed(m.speed), a.scaleEnergy(m.energyConsumption)
-                )
-            }
-        }
-        listOf(IEItems.ADVANCED_DISENCHANTER, IEItems.INFINITY_DISENCHANTER).forEach { base ->
-            add<AutoDisenchanter>(base) { a, m ->
-                AutoDisenchanter(
-                    a.itemGroup, a.itemStack, a.recipeType, a.recipe, a.scaleSpeed(m.speed), a.scaleEnergy(m.energyConsumption)
-                )
-            }
         }
         listOf(IEItems.ADVANCED_CHARGER, IEItems.INFINITY_CHARGER).forEach { base ->
             add<ChargingBench>(base) { a, m ->
