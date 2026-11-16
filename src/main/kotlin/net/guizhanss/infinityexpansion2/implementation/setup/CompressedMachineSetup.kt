@@ -33,6 +33,7 @@ import net.guizhanss.infinityexpansion2.implementation.items.sfextension.Chargin
 import net.guizhanss.infinityexpansion2.implementation.items.sfextension.GeoMiner
 import net.guizhanss.infinityexpansion2.implementation.items.sfextension.Smeltery
 import org.bukkit.inventory.ItemStack
+import java.util.Locale
 import java.util.logging.Level
 
 /**
@@ -300,6 +301,31 @@ internal object CompressedMachineSetup {
         InfinityExpansion2.log(Level.INFO, "Registered $count compressed machines.")
     }
 
+    // numbers in the lore that are multiplied: energy (J/t), capacity (J Capacity) and speed (Slimefun machines only)
+    private val ENERGY_PATTERN = Regex("""((?:[&§].)*)(\d[\d,]*)(?= J)""")
+    private val SPEED_PATTERN = Regex("""(Speed: (?:[&§].)*)(\d+)x""")
+
+    /**
+     * Multiply the energy and capacity numbers in a lore line,
+     * also the speed for Slimefun expansion machines (their processing speed is multiplied).
+     */
+    private fun scaleLoreLine(line: String, entry: Entry, multiplier: Int): String {
+        var result = line
+        if (line.contains(" J/t") || line.contains(" J Capacity")) {
+            result = ENERGY_PATTERN.replace(result) { match ->
+                val value = match.groupValues[2].replace(",", "").toLongOrNull() ?: return@replace match.value
+                match.groupValues[1] + "%,d".format(Locale.US, value * multiplier)
+            }
+        }
+        if (entry.category == Category.SLIMEFUN_EXPANSION) {
+            result = SPEED_PATTERN.replace(result) { match ->
+                val value = match.groupValues[2].toLongOrNull() ?: return@replace match.value
+                "${match.groupValues[1]}${value * multiplier}x"
+            }
+        }
+        return result
+    }
+
     private fun createItemStack(entry: Entry, baseItem: SlimefunItem, multiplier: Int): SlimefunItemStack {
         val localization = InfinityExpansion2.localization
         val name = ChatUtil.color(
@@ -311,7 +337,8 @@ internal object CompressedMachineSetup {
             entry.category == Category.GENERATOR -> "compressed-generator"
             else -> "compressed-machine"
         }
-        val lore = (localization.getItemLore(entry.id) + "" + localization.getLore(loreId, multiplier))
+        val lore = (localization.getItemLore(entry.id).map { scaleLoreLine(it, entry, multiplier) } +
+            "" + localization.getLore(loreId, multiplier))
             .map { ChatUtil.color(it) }
 
         val item = entry.base.toItem()
