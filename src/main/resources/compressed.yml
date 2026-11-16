@@ -65,6 +65,7 @@ machines:
   INGOT_FORMER_PLUS_2: true
   INGOT_FORMER_PLUS_3: true
   INGOT_FORMER_PLUS_4: true
+  URANIUM_INGOT_EXTRACTOR_PLUS: true
 
 # Enable/disable the compressed versions (all multipliers) of each Slimefun Expansion item
 slimefun-expansion:

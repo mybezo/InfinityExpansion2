@@ -234,6 +234,15 @@ items:
     conditions:
       force-load: true
     name: "&eExperiences:"
+  _UI_SW_SELECTOR_SLOT:
+    conditions:
+      force-load: true
+    name: "&eOutput Selector"
+    lore:
+      - "&7Put the block you want to produce"
+      - "&7in the slot between, e.g. Gravel or Glass."
+      - "&7The block is not consumed."
+      - "&7Empty: produces Cobblestone."
   _UI_OSCILLATOR_SLOT:
     conditions:
       force-load: true

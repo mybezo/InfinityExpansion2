@@ -150,23 +150,6 @@ data class MenuLayout(
             statusSlot = 9,
         )
 
-        // compressed stoneworks factory: same choice slots, no intermediate slots, 2 rows of output
-        val STONEWORKS_FACTORY_COMPRESSED = MenuLayout(
-            background = intArrayOf(
-                0, 1, 3, 5, 7, 8,
-                10, 12, 14, 16, 17,
-            ),
-            outputBorder = intArrayOf(
-                18, 19, 20, 21, 22, 23, 24, 25, 26,
-                45, 46, 47, 48, 49, 50, 51, 52, 53,
-            ),
-            outputSlots = intArrayOf(
-                27, 28, 29, 30, 31, 32, 33, 34, 35,
-                36, 37, 38, 39, 40, 41, 42, 43, 44,
-            ),
-            statusSlot = 9,
-        )
-
         val RESOURCE_SYNTHESIZER = MenuLayout(
             background = intArrayOf(
                 3, 4, 5,

@@ -190,6 +190,11 @@ internal object GuiItems {
         "&7${exp}"
     )
 
+    val SW_SELECTOR_SLOT = InfinityExpansion2.localization.getGuiItem(
+        Material.LIME_STAINED_GLASS_PANE.asMaterialType(),
+        "sw_selector_slot"
+    )
+
     val OSCILLATOR_SLOT = InfinityExpansion2.localization.getGuiItem(
         Material.LIME_STAINED_GLASS_PANE.asMaterialType(),
         "oscillator_slot"

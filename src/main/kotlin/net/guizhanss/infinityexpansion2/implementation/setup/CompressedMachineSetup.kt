@@ -10,12 +10,12 @@ import net.guizhanss.guizhanlib.kt.slimefun.items.toItem
 import net.guizhanss.guizhanlib.minecraft.utils.ChatUtil
 import net.guizhanss.infinityexpansion2.InfinityExpansion2
 import net.guizhanss.infinityexpansion2.core.items.attributes.Compressible
-import net.guizhanss.infinityexpansion2.core.menu.MenuLayout
 import net.guizhanss.infinityexpansion2.implementation.IEItems
 import net.guizhanss.infinityexpansion2.implementation.guide.IEItemGroups
 import net.guizhanss.infinityexpansion2.implementation.items.generators.EnergyGenerator
 import net.guizhanss.infinityexpansion2.implementation.items.generators.InfinityReactor
 import net.guizhanss.infinityexpansion2.implementation.items.generators.InfinitySingularityReactor
+import net.guizhanss.infinityexpansion2.implementation.items.machines.CompressedStoneworksFactory
 import net.guizhanss.infinityexpansion2.implementation.items.machines.FlowerGrower
 import net.guizhanss.infinityexpansion2.implementation.items.machines.GeoQuarry
 import net.guizhanss.infinityexpansion2.implementation.items.machines.PlusMachine
@@ -165,10 +165,7 @@ internal object CompressedMachineSetup {
             IEItems.STONEWORKS_FACTORY_3, IEItems.STONEWORKS_FACTORY_4
         ).forEach { base ->
             add<StoneworksFactory>(base) { a, m ->
-                StoneworksFactory(
-                    a.itemGroup, a.itemStack, a.recipeType, a.recipe, m.speed, a.energy(m),
-                    MenuLayout.STONEWORKS_FACTORY_COMPRESSED
-                )
+                CompressedStoneworksFactory(a.itemGroup, a.itemStack, a.recipeType, a.recipe, m.speed, a.energy(m))
             }
         }
 
@@ -193,6 +190,7 @@ internal object CompressedMachineSetup {
             IEItems.DUST_EXTRACTOR_PLUS_3, IEItems.DUST_EXTRACTOR_PLUS_4,
             IEItems.INGOT_FORMER_PLUS, IEItems.INGOT_FORMER_PLUS_2,
             IEItems.INGOT_FORMER_PLUS_3, IEItems.INGOT_FORMER_PLUS_4,
+            IEItems.URANIUM_INGOT_EXTRACTOR_PLUS,
         ).forEach { base ->
             add<PlusMachine>(base) { a, m ->
                 PlusMachine(a.itemGroup, a.itemStack, a.recipeType, a.recipe, m.machineType, m.outputAmount, a.energy(m))
