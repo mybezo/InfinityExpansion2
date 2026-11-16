@@ -1,6 +1,7 @@
-# Compressed Machine settings
+# Compressed Machine and Compressed Generator settings
 # A compressed machine combines multiple machines into one.
 # Its input, output and energy consumption are multiplied by the multiplier.
+# Compressed generators produce multiplied energy, reactors also consume multiplied fuel.
 #
 # Recipes (Compressor):
 #   x8  = 8 of the original machine
@@ -64,3 +65,18 @@ machines:
   INGOT_FORMER_PLUS_2: true
   INGOT_FORMER_PLUS_3: true
   INGOT_FORMER_PLUS_4: true
+
+# Enable/disable the compressed versions (all multipliers) of each generator
+# Note: Infinity Singularity Reactor only goes up to x32.
+generators:
+  HYDRO_GENERATOR: true
+  HYDRO_GENERATOR_2: true
+  GEOTHERMAL_GENERATOR: true
+  GEOTHERMAL_GENERATOR_2: true
+  SOLAR_PANEL: true
+  SOLAR_PANEL_2: true
+  SOLAR_PANEL_3: true
+  VOID_PANEL: true
+  INFINITY_PANEL: true
+  INFINITY_REACTOR: true
+  INFINITY_SINGULARITY_REACTOR: true

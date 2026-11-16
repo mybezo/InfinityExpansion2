@@ -9,6 +9,7 @@ import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponen
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset
 import net.guizhanss.guizhanlib.slimefun.machines.TickingMenuBlock
+import net.guizhanss.infinityexpansion2.core.items.attributes.Compressible
 import net.guizhanss.infinityexpansion2.core.items.attributes.CustomTickRateMachine
 import net.guizhanss.infinityexpansion2.core.items.attributes.EnergyTickingConsumer
 import net.guizhanss.infinityexpansion2.core.menu.MenuLayout
@@ -28,7 +29,7 @@ abstract class AbstractTickingMachine(
     val defaultEnergyPerTick: Int,
     tickRate: Int = 1,
 ) : TickingMenuBlock(itemGroup, itemStack, recipeType, recipe), EnergyNetComponent, EnergyTickingConsumer,
-    CustomTickRateMachine {
+    CustomTickRateMachine, Compressible {
 
     // should avoid accessing this directly, use getCustomTickRate() instead
     protected val tickRateSetting = IntRangeSetting(this, "tick-rate", 1, tickRate, 3600)
@@ -40,13 +41,7 @@ abstract class AbstractTickingMachine(
         addItemSetting(tickRateSetting, energyPerTickSetting)
     }
 
-    /**
-     * The amount of machines combined into this machine (compressed machines).
-     * Every operation produces (and consumes) this many times the normal amount.
-     * It is 1 for normal machines, and must only be changed before the item is registered.
-     */
-    var multiplier: Int = 1
-        internal set
+    override var multiplier: Int = 1
 
     override fun getCustomTickRate() = tickRateSetting.value
 

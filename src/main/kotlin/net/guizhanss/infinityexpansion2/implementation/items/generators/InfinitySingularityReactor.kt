@@ -58,13 +58,15 @@ class InfinitySingularityReactor(
         val infinitySingInput = menu.getItemInSlot(INPUT)
 
         if (progress == 0) { // fresh start
-            if (infinitySingInput == null || !infinitySingInput.isInfinitySingularity()) {
+            if (infinitySingInput == null || !infinitySingInput.isInfinitySingularity() ||
+                infinitySingInput.amount < multiplier
+            ) {
                 menu.setStatus { NEED }
                 return 0
             }
 
             // input is valid, start new progress
-            menu.consumeItem(INPUT)
+            menu.consumeItem(INPUT, multiplier)
             menu.setStatus { info(infinitySingularityDurationSetting.value) }
             l.setProgress(1)
             return getEnergyProduction()

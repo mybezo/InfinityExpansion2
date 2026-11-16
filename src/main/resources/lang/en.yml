@@ -40,6 +40,10 @@ items:
     conditions:
       force-load: true
     name: "&k.&bI&4E&a&l2&k. &a- &bCompressed Machine"
+  _IG_COMPRESSED_GENERATORS:
+    conditions:
+      force-load: true
+    name: "&k.&bI&4E&a&l2&k. &a- &cCompressed Generator"
   _IG_GENERATORS:
     conditions:
       force-load: true

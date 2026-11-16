@@ -9,6 +9,7 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu
 import net.guizhanss.guizhanlib.kt.slimefun.utils.getInt
 import net.guizhanss.guizhanlib.kt.slimefun.utils.setInt
 import net.guizhanss.guizhanlib.slimefun.machines.MenuBlock
+import net.guizhanss.infinityexpansion2.core.items.attributes.Compressible
 import net.guizhanss.infinityexpansion2.core.items.attributes.CustomTickRateMachine
 import net.guizhanss.infinityexpansion2.core.items.attributes.EnergyProducer
 import net.guizhanss.infinityexpansion2.core.items.attributes.InformationalRecipeDisplayItem
@@ -21,9 +22,14 @@ abstract class AbstractReactor(
     itemStack: SlimefunItemStack,
     recipeType: RecipeType,
     recipe: Array<out ItemStack?>,
-    defaultProduction: Int,
+    val defaultProduction: Int,
 ) : MenuBlock(itemGroup, itemStack, recipeType, recipe), EnergyNetProvider, CustomTickRateMachine, EnergyProducer,
-    InformationalRecipeDisplayItem {
+    InformationalRecipeDisplayItem, Compressible {
+
+    /**
+     * Compressed reactors produce [multiplier] times the energy and consume [multiplier] times the fuel.
+     */
+    override var multiplier: Int = 1
 
     private val tickRateSetting = IntRangeSetting(this, "tick-rate", 1, 1, 3600)
     private val energyProductionSetting =

@@ -81,18 +81,18 @@ class InfinityReactor(
         val infinityInput = menu.getItemInSlot(INFINITY_INPUT)
 
         if (progress == 0) { // fresh start
-            if (infinityInput == null || !infinityInput.isInfinityIngot()) {
+            if (infinityInput == null || !infinityInput.isInfinityIngot() || infinityInput.amount < multiplier) {
                 menu.setStatus { NEED_INFINITY }
                 return 0
             }
-            if (voidInput == null || !voidInput.isVoidIngot()) {
+            if (voidInput == null || !voidInput.isVoidIngot() || voidInput.amount < multiplier) {
                 menu.setStatus { NEED_VOID }
                 return 0
             }
 
             // input is valid, start new progress
-            menu.consumeItem(VOID_INPUT)
-            menu.consumeItem(INFINITY_INPUT)
+            menu.consumeItem(VOID_INPUT, multiplier)
+            menu.consumeItem(INFINITY_INPUT, multiplier)
             menu.setStatus { info(infinityIngotDurationSetting.value, voidIngotDurationSetting.value) }
             l.setProgress(1)
             return getEnergyProduction()
@@ -105,12 +105,12 @@ class InfinityReactor(
         }
 
         if (Math.floorMod(progress, voidIngotDurationSetting.value) == 0) { // need void
-            if (voidInput == null || !voidInput.isVoidIngot()) {
+            if (voidInput == null || !voidInput.isVoidIngot() || voidInput.amount < multiplier) {
                 menu.setStatus { NEED_VOID }
                 return 0
             }
 
-            menu.consumeItem(VOID_INPUT)
+            menu.consumeItem(VOID_INPUT, multiplier)
         }
 
         // progressing
