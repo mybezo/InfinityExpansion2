@@ -56,11 +56,13 @@ internal object CompressedMachineSetup {
      */
     private enum class Category(val configSection: String) {
         MACHINE("machines"),
+        SLIMEFUN_EXPANSION("slimefun-expansion"),
         GENERATOR("generators");
 
         val itemGroup: ItemGroup
             get() = when (this) {
                 MACHINE -> IEItemGroups.COMPRESSED_MACHINES
+                SLIMEFUN_EXPANSION -> IEItemGroups.COMPRESSED_SLIMEFUN_EXPANSION
                 GENERATOR -> IEItemGroups.COMPRESSED_GENERATORS
             }
     }
@@ -198,27 +200,27 @@ internal object CompressedMachineSetup {
      * their processing speed and energy are multiplied (Slimefun handles one recipe per operation).
      */
     private fun registerSlimefunExpansion() {
-        add<Smeltery>(IEItems.ADVANCED_SMELTERY) { a, m ->
+        add<Smeltery>(IEItems.ADVANCED_SMELTERY, Category.SLIMEFUN_EXPANSION) { a, m ->
             Smeltery(a.itemGroup, a.itemStack, a.recipeType, a.recipe, a.scaleSpeed(m.speed), a.scaleEnergy(m.energyConsumption))
         }
-        add<Smeltery>(IEItems.VOID_SMELTERY) { a, m ->
+        add<Smeltery>(IEItems.VOID_SMELTERY, Category.SLIMEFUN_EXPANSION) { a, m ->
             Smeltery(a.itemGroup, a.itemStack, a.recipeType, a.recipe, a.scaleSpeed(m.speed), a.scaleEnergy(m.energyConsumption))
         }
         listOf(IEItems.ADVANCED_CHARGER, IEItems.INFINITY_CHARGER).forEach { base ->
-            add<ChargingBench>(base) { a, m ->
+            add<ChargingBench>(base, Category.SLIMEFUN_EXPANSION) { a, m ->
                 ChargingBench(
                     a.itemGroup, a.itemStack, a.recipeType, a.recipe, a.scaleSpeed(m.speed), a.scaleEnergy(m.energyConsumption)
                 )
             }
         }
-        add<GeoMiner>(IEItems.ADVANCED_GEO_MINER) { a, m ->
+        add<GeoMiner>(IEItems.ADVANCED_GEO_MINER, Category.SLIMEFUN_EXPANSION) { a, m ->
             GeoMiner(a.itemGroup, a.itemStack, a.recipeType, a.recipe, a.scaleSpeed(m.speed), a.scaleEnergy(m.energyConsumption))
         }
-        add<Capacitor>(IEItems.VOID_CAPACITOR) { a, m ->
+        add<Capacitor>(IEItems.VOID_CAPACITOR, Category.SLIMEFUN_EXPANSION) { a, m ->
             Capacitor(a.itemGroup, a.itemStack, a.recipeType, a.recipe, a.scale(m.capacity, Int.MAX_VALUE.toLong()))
         }
         // the capacity of x32 and x64 would exceed the integer limit
-        add<Capacitor>(IEItems.INFINITY_CAPACITOR, maxMultiplier = 16) { a, m ->
+        add<Capacitor>(IEItems.INFINITY_CAPACITOR, Category.SLIMEFUN_EXPANSION, maxMultiplier = 16) { a, m ->
             Capacitor(a.itemGroup, a.itemStack, a.recipeType, a.recipe, a.scale(m.capacity, Int.MAX_VALUE.toLong()))
         }
     }

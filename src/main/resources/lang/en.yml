@@ -44,6 +44,10 @@ items:
     conditions:
       force-load: true
     name: "&k.&bI&4E&a&l2&k. &a- &bCompressed Machine"
+  _IG_COMPRESSED_SLIMEFUN_EXPANSION:
+    conditions:
+      force-load: true
+    name: "&k.&bI&4E&a&l2&k. &a- &aCompressed Slimefun Expansion"
   _IG_COMPRESSED_GENERATORS:
     conditions:
       force-load: true

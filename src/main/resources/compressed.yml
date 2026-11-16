@@ -65,6 +65,9 @@ machines:
   INGOT_FORMER_PLUS_2: true
   INGOT_FORMER_PLUS_3: true
   INGOT_FORMER_PLUS_4: true
+
+# Enable/disable the compressed versions (all multipliers) of each Slimefun Expansion item
+slimefun-expansion:
   ADVANCED_SMELTERY: true
   VOID_SMELTERY: true
   ADVANCED_CHARGER: true

@@ -35,6 +35,8 @@ object IEItemGroups {
     val MACHINES = createSubGroup("machines", Material.LOOM.asMaterialType())
     val PLUS_MACHINES = createSubGroup("plus_machines", Material.SMOKER.asMaterialType())
     val COMPRESSED_MACHINES = createSubGroup("compressed_machines", Material.LOOM.asMaterialType())
+    val COMPRESSED_SLIMEFUN_EXPANSION =
+        createSubGroup("compressed_slimefun_expansion", Material.SLIME_BLOCK.asMaterialType())
     val COMPRESSED_GENERATORS = createSubGroup("compressed_generators", Material.BLAST_FURNACE.asMaterialType())
 
     /**
@@ -70,7 +72,7 @@ object IEItemGroups {
             STORAGE,
         )
         if (InfinityExpansion2.configService.compressedConfig.getBoolean("enabled")) {
-            COMPRESSED.addSubGroups(COMPRESSED_MACHINES, COMPRESSED_GENERATORS)
+            COMPRESSED.addSubGroups(COMPRESSED_MACHINES, COMPRESSED_SLIMEFUN_EXPANSION, COMPRESSED_GENERATORS)
             MAIN.setFixedItem(COMPRESSED_ITEMS_SLOT, object : MenuItem {
                 override fun getItem(p: Player, profile: PlayerProfile) = COMPRESSED.getItem(p)
 
