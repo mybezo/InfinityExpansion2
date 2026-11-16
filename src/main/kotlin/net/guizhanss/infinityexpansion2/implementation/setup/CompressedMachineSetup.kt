@@ -329,7 +329,7 @@ internal object CompressedMachineSetup {
     private fun createItemStack(entry: Entry, baseItem: SlimefunItem, multiplier: Int): SlimefunItemStack {
         val localization = InfinityExpansion2.localization
         val name = ChatUtil.color(
-            "${localization.getItemName(entry.id)} &a(x$multiplier)"
+            "${localization.getItemName(entry.id)} &a($multiplier)"
         )
         // the lore names the kind of item that is combined
         val loreId = when {
