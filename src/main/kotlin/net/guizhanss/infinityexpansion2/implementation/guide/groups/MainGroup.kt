@@ -22,16 +22,28 @@ class MainGroup(
     item: ItemStack
 ) : AbstractItemGroup(key, item) {
 
-    fun addSubGroups(vararg groups: SubGroup) {
-        addMenuItem(*groups.map {
-            object : MenuItem {
-                override fun getItem(p: Player, profile: PlayerProfile) = it.getItem(p)
+    /**
+     * The [MenuItem]s placed at fixed slots, they are drawn on every page.
+     */
+    private val fixedItems = mutableMapOf<Int, MenuItem>()
 
-                override fun onClick(p: Player, profile: PlayerProfile, mode: SlimefunGuideMode, action: ClickAction) {
-                    SlimefunGuide.openItemGroup(profile, DisplaySubGroup(it), mode, 1)
-                }
+    /**
+     * Place a [MenuItem] at a fixed [slot] of the menu.
+     */
+    fun setFixedItem(slot: Int, item: MenuItem) {
+        fixedItems[slot] = item
+    }
+
+    override fun drawPage(p: Player, profile: PlayerProfile, mode: SlimefunGuideMode, menu: ChestMenu, page: Int) {
+        super.drawPage(p, profile, mode, menu, page)
+
+        fixedItems.forEach { (slot, item) ->
+            menu.replaceExistingItem(slot, item.getItem(p, profile))
+            menu.addMenuClickHandler(slot) { _, _, _, action ->
+                item.onClick(p, profile, mode, action)
+                false
             }
-        }.toTypedArray())
+        }
     }
 
     override fun getGuideTitle(p: Player) = InfinityExpansion2.integrationService.getItemGroupName(p, "main")

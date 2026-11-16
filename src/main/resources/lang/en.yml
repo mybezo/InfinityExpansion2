@@ -36,6 +36,10 @@ items:
     conditions:
       force-load: true
     name: "&k.&bI&4E&a&l2&k. &a- &6Machine Plus"
+  _IG_COMPRESSED_ITEMS:
+    conditions:
+      force-load: true
+    name: "&k.&bI&4E&a&l2&k. &a- &dCompressed Items"
   _IG_COMPRESSED_MACHINES:
     conditions:
       force-load: true
