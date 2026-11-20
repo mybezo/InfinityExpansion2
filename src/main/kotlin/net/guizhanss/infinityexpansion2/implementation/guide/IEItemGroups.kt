@@ -1,13 +1,20 @@
 package net.guizhanss.infinityexpansion2.implementation.guide
 
+import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile
+import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuide
+import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode
+import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ClickAction
 import net.guizhanss.guizhanlib.kt.slimefun.items.builder.MaterialType
 import net.guizhanss.guizhanlib.kt.slimefun.items.builder.asMaterialType
 import net.guizhanss.guizhanlib.kt.slimefun.items.toItem
 import net.guizhanss.infinityexpansion2.InfinityExpansion2
+import net.guizhanss.infinityexpansion2.core.menu.MenuItem
+import net.guizhanss.infinityexpansion2.implementation.guide.groups.CompressedGroup
 import net.guizhanss.infinityexpansion2.implementation.guide.groups.MainGroup
 import net.guizhanss.infinityexpansion2.implementation.guide.groups.SubGroup
 import net.guizhanss.infinityexpansion2.utils.bukkitext.ie2Key
 import org.bukkit.Material
+import org.bukkit.entity.Player
 
 object IEItemGroups {
 
@@ -27,6 +34,21 @@ object IEItemGroups {
     val GEAR = createSubGroup("gear", Material.DIAMOND_CHESTPLATE.asMaterialType())
     val MACHINES = createSubGroup("machines", Material.LOOM.asMaterialType())
     val PLUS_MACHINES = createSubGroup("plus_machines", Material.SMOKER.asMaterialType())
+    val COMPRESSED_MACHINES = createSubGroup("compressed_machines", Material.LOOM.asMaterialType())
+    val COMPRESSED_SLIMEFUN_EXPANSION =
+        createSubGroup("compressed_slimefun_expansion", Material.SLIME_BLOCK.asMaterialType())
+    val COMPRESSED_GENERATORS = createSubGroup("compressed_generators", Material.BLAST_FURNACE.asMaterialType())
+
+    /**
+     * The "Compressed Items" menu, shown at a fixed slot of the main group.
+     */
+    val COMPRESSED = CompressedGroup(
+        ie2Key("compressed_items"),
+        InfinityExpansion2.localization.getItemGroupItem(
+            COMPRESSED_ITEMS_TEXTURE.ifEmpty { null }?.asMaterialType() ?: Material.PLAYER_HEAD.asMaterialType(),
+            "compressed_items"
+        ).toItem()
+    )
     val GENERATORS = createSubGroup("generators", Material.BLAST_FURNACE.asMaterialType())
     val MOB_SIMULATION = createSubGroup("mob_simulation", Material.BEACON.asMaterialType())
     val STORAGE = createSubGroup("storage", Material.BEEHIVE.asMaterialType())
@@ -43,13 +65,30 @@ object IEItemGroups {
             GEAR,
             MACHINES,
             PLUS_MACHINES,
+        )
+        MAIN.addSubGroups(
             GENERATORS,
             MOB_SIMULATION,
             STORAGE,
         )
+        if (InfinityExpansion2.configService.compressedConfig.getBoolean("enabled")) {
+            COMPRESSED.addSubGroups(COMPRESSED_MACHINES, COMPRESSED_SLIMEFUN_EXPANSION, COMPRESSED_GENERATORS)
+            MAIN.setFixedItem(COMPRESSED_ITEMS_SLOT, object : MenuItem {
+                override fun getItem(p: Player, profile: PlayerProfile) = COMPRESSED.getItem(p)
+
+                override fun onClick(p: Player, profile: PlayerProfile, mode: SlimefunGuideMode, action: ClickAction) {
+                    SlimefunGuide.openItemGroup(profile, COMPRESSED, mode, 1)
+                }
+            })
+        }
         MOB_SIMULATION.isCrossAddonItemGroup = true
         MAIN.register(InfinityExpansion2.instance)
     }
+
+    private const val COMPRESSED_ITEMS_SLOT = 40
+
+    // the head texture of the "Compressed Items" icon (Mybezo's skin), empty to use a default player head
+    private const val COMPRESSED_ITEMS_TEXTURE = "82600941fab88efc41bb132d873d3b5c5f35f7720ebd9375476c1a18955bb03e"
 
     private fun createSubGroup(key: String, material: MaterialType) = SubGroup(
         ie2Key(key),

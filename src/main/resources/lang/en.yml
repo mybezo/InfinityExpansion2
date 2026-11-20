@@ -36,6 +36,22 @@ items:
     conditions:
       force-load: true
     name: "&k.&bI&4E&a&l2&k. &a- &6Machine Plus"
+  _IG_COMPRESSED_ITEMS:
+    conditions:
+      force-load: true
+    name: "&k.&bI&4E&a&l2&k. &a- &dCompressed Items"
+  _IG_COMPRESSED_MACHINES:
+    conditions:
+      force-load: true
+    name: "&k.&bI&4E&a&l2&k. &a- &bCompressed Machine"
+  _IG_COMPRESSED_SLIMEFUN_EXPANSION:
+    conditions:
+      force-load: true
+    name: "&k.&bI&4E&a&l2&k. &a- &aCompressed Slimefun Expansion"
+  _IG_COMPRESSED_GENERATORS:
+    conditions:
+      force-load: true
+    name: "&k.&bI&4E&a&l2&k. &a- &cCompressed Generator"
   _IG_GENERATORS:
     conditions:
       force-load: true
@@ -178,6 +194,10 @@ items:
     conditions:
       force-load: true
     name: "&eRecipes:"
+  _UI_MULTIPLIER:
+    conditions:
+      force-load: true
+    name: "&eMultiplier:"
   _UI_TICK_RATE:
     conditions:
       force-load: true
@@ -214,6 +234,15 @@ items:
     conditions:
       force-load: true
     name: "&eExperiences:"
+  _UI_SW_SELECTOR_SLOT:
+    conditions:
+      force-load: true
+    name: "&eOutput Selector"
+    lore:
+      - "&7Put the block you want to produce"
+      - "&7in the slot between, e.g. Gravel or Glass."
+      - "&7The block is not consumed."
+      - "&7Empty: produces Cobblestone."
   _UI_OSCILLATOR_SLOT:
     conditions:
       force-load: true
@@ -1504,6 +1533,9 @@ lores:
       main: "&fShift + Click&7: Go back to main page"
   collect: "&7Collects:"
   produce: "&7Produces:"
+  compressed-machine: "&7Combines &f{0} &7machines into one."
+  compressed-generator: "&7Combines &f{0} &7generators into one."
+  compressed-capacitor: "&7Combines &f{0} &7capacitors into one."
   info: "&7Information:"
   soulbound: "&bSoulbound"
   vein-miner: "&bVein Miner"

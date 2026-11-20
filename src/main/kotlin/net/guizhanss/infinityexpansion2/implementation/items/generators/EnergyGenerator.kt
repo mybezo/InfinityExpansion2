@@ -13,6 +13,7 @@ import net.guizhanss.guizhanlib.common.utils.StringUtil
 import net.guizhanss.guizhanlib.kt.slimefun.utils.getSfItem
 import net.guizhanss.infinityexpansion2.InfinityExpansion2
 import net.guizhanss.infinityexpansion2.core.debug.DebugCase
+import net.guizhanss.infinityexpansion2.core.items.attributes.Compressible
 import net.guizhanss.infinityexpansion2.core.items.attributes.CustomTickRateMachine
 import net.guizhanss.infinityexpansion2.core.items.attributes.CustomWikiItem
 import net.guizhanss.infinityexpansion2.core.items.attributes.EnergyProducer
@@ -30,10 +31,12 @@ class EnergyGenerator(
     itemStack: SlimefunItemStack,
     recipeType: RecipeType,
     recipe: Array<out ItemStack?>,
-    private val type: GeneratorType,
-    defaultProduction: Int,
+    val type: GeneratorType,
+    val defaultProduction: Int,
 ) : SlimefunItem(itemGroup, itemStack, recipeType, recipe), EnergyNetProvider, CustomTickRateMachine, EnergyProducer,
-    InformationalRecipeDisplayItem, CustomWikiItem {
+    InformationalRecipeDisplayItem, CustomWikiItem, Compressible {
+
+    override var multiplier: Int = 1
 
     override val wikiUrl: String
         get() = "generators/" + when (type) {

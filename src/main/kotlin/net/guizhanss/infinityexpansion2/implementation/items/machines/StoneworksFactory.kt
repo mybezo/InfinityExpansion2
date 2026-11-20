@@ -3,29 +3,28 @@ package net.guizhanss.infinityexpansion2.implementation.items.machines
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack
 import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType
-import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils
-import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ClickAction
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset
-import net.guizhanss.guizhanlib.kt.common.extensions.valueOfOrNull
-import net.guizhanss.guizhanlib.kt.minecraft.extensions.isAir
+import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu
 import net.guizhanss.guizhanlib.kt.minecraft.extensions.toItem
-import net.guizhanss.guizhanlib.kt.minecraft.items.edit
 import net.guizhanss.guizhanlib.kt.slimefun.extensions.isSlimefunItem
-import net.guizhanss.guizhanlib.kt.slimefun.items.builder.asMaterialType
-import net.guizhanss.guizhanlib.kt.slimefun.utils.getString
-import net.guizhanss.guizhanlib.kt.slimefun.utils.hasData
-import net.guizhanss.guizhanlib.kt.slimefun.utils.setString
-import net.guizhanss.infinityexpansion2.InfinityExpansion2
 import net.guizhanss.infinityexpansion2.core.items.attributes.CustomWikiItem
 import net.guizhanss.infinityexpansion2.core.items.attributes.InformationalRecipeDisplayItem
 import net.guizhanss.infinityexpansion2.core.menu.MenuLayout
 import net.guizhanss.infinityexpansion2.implementation.items.machines.abstracts.AbstractTickingMachine
 import net.guizhanss.infinityexpansion2.utils.items.GuiItems
+import net.guizhanss.infinityexpansion2.utils.slimefunext.pushAvailable
 import org.bukkit.Material
 import org.bukkit.block.Block
 import org.bukkit.inventory.ItemStack
 
+/**
+ * Generates cobblestone and processes it into various materials, with a quarry-like menu.
+ *
+ * The player puts the wanted block into the selector slot (it is not consumed),
+ * and the factory produces it directly from cobblestone. An empty selector produces cobblestone.
+ * The products are the materials that can be made from cobblestone within 3 [Process]es.
+ */
 class StoneworksFactory(
     itemGroup: ItemGroup,
     itemStack: SlimefunItemStack,
@@ -33,144 +32,86 @@ class StoneworksFactory(
     recipe: Array<out ItemStack?>,
     val speed: Int,
     energyPerTick: Int,
-) : AbstractTickingMachine(itemGroup, itemStack, recipeType, recipe, MenuLayout.STONEWORKS_FACTORY, energyPerTick),
+) : AbstractTickingMachine(itemGroup, itemStack, recipeType, recipe, MenuLayout.SINGLE_INPUT, energyPerTick),
     InformationalRecipeDisplayItem, CustomWikiItem {
 
     override val wikiUrl = "machines/stoneworks-factory"
 
     override fun setup(preset: BlockMenuPreset) {
         super.setup(preset)
-        preset.drawBackground(CHANGE_ITEM, CHOICE_INFO_SLOTS)
+        preset.drawBackground(GuiItems.SW_SELECTOR_SLOT, layout.inputBorder)
     }
 
-    override fun onNewInstance(menu: BlockMenu, b: Block) {
-        super.onNewInstance(menu, b)
-
-        if (!b.hasData("choice0")) {
-            // new block, init choices
-            menu.setChoice(0, Choice.NONE)
-            menu.setChoice(1, Choice.NONE)
-            menu.setChoice(2, Choice.NONE)
-        }
-
-        // set the choice item
-        CHOICE_SLOTS.forEachIndexed { index, slot ->
-            menu.replaceExistingItem(slot, menu.getChoice(index).item)
-            menu.addMenuClickHandler(slot) { _, _, _, action ->
-                val choice = menu.getChoice(index)
-                val nextChoiceIndex =
-                    (choice.ordinal + action.choiceOffset() + Choice.entries.size) % Choice.entries.size
-                val nextChoice = Choice.entries[nextChoiceIndex]
-
-                menu.replaceExistingItem(slot, nextChoice.item)
-                menu.setChoice(index, nextChoice)
-                false
-            }
-        }
-    }
+    // the selector is set by players only, cargo cannot insert into it
+    override fun getInputSlots(menu: DirtyChestMenu, item: ItemStack) = intArrayOf()
 
     override fun process(b: Block, menu: BlockMenu): Boolean {
-        menu.setStatus { GuiItems.PRODUCING }
-
-        val tick = tickCount / getCustomTickRate() % (CHOICE_SLOTS.size + 1)
-        if (tick == CHOICE_SLOTS.size) {
-            menu.pushItem(Material.COBBLESTONE.toItem(speed), ITEM_SLOTS[0])
-        } else {
-            process(menu, tick)
+        val selector = menu.getItemInSlot(inputSlots[0])
+        val product = when {
+            selector == null || selector.type.isAir -> Material.COBBLESTONE
+            !selector.isSlimefunItem() && selector.type in PRODUCTS -> selector.type
+            else -> {
+                menu.setStatus { GuiItems.INVALID_INPUT }
+                return false
+            }
         }
 
+        // produces once every 4 operations (generate + 3 processes)
+        val step = tickCount / getCustomTickRate() % CYCLE
+        if (step != CYCLE - 1) {
+            menu.setStatus { GuiItems.PRODUCING }
+            return true
+        }
+
+        if (menu.pushAvailable(product.toItem(), speed.toLong() * multiplier, outputSlots) == 0L) {
+            menu.setStatus { GuiItems.NO_ROOM }
+            return false
+        }
+        menu.setStatus { GuiItems.PRODUCING }
         return true
     }
 
-    private fun BlockMenu.getChoice(index: Int) =
-        location.getString("choice$index", Choice.NONE.name)
-            .let { valueOfOrNull<Choice>(it) ?: Choice.NONE }
-
-    private fun BlockMenu.setChoice(index: Int, choice: Choice) {
-        location.setString("choice$index", choice.name)
-    }
-
-    private fun ClickAction.choiceOffset() = if (isRightClicked) -1 else 1
-
-    private fun process(menu: BlockMenu, tick: Int) {
-        val slot = ITEM_SLOTS[tick]
-        val currentItem = menu.getItemInSlot(slot)
-        // nothing to do if current item is empty
-        if (currentItem.isAir()) return
-        val processedAmount = currentItem.amount.coerceAtMost(speed)
-
-        val nextSlot = ITEM_SLOTS.getOrElse(tick + 1) { layout.outputSlots[0] }
-        val nextItem = menu.getItemInSlot(nextSlot)
-
-        val processedItem = if (currentItem.isSlimefunItem()) {
-            // slimefun items are only moved
-            currentItem.clone().edit { amount(processedAmount) }
-        } else {
-            // non-slimefun items are processed
-            val choice = menu.getChoice(tick)
-            (choice.map[currentItem.type] ?: currentItem.type).toItem(processedAmount)
-        }
-
-        if (nextItem.isAir()) {
-            // no item in the next slot, just move the item
-            menu.consumeItem(slot, processedAmount)
-            menu.pushItem(processedItem, nextSlot)
-        } else {
-            // check if the item in the next slot is the processed item
-            if (!SlimefunUtils.isItemSimilar(nextItem, processedItem, false, false)) return
-
-            // similar item, calculate the amount to move
-            val amount = processedAmount.coerceAtMost(processedItem.maxStackSize - nextItem.amount)
-
-            // item has maxed amount, no more room
-            if (amount == 0) return
-
-            menu.consumeItem(slot, amount)
-            nextItem.amount += amount
-        }
-    }
-
-    override fun getDefaultDisplayRecipes(): List<ItemStack?> {
-        val result = mutableListOf<ItemStack?>()
-        Choice.entries.forEach {
-            if (it == Choice.NONE) return@forEach
-            result.addAll(listOf(it.item, null))
-
-            it.map.entries.forEach { (input, output) ->
-                result.add(input.toItem())
-                result.add(output.toItem())
-            }
-
-            result.addAll(listOf(null, null))
-        }
-        return result
-    }
+    override fun getDefaultDisplayRecipes(): List<ItemStack?> =
+        PRODUCTS.map { it.toItem(speed.coerceIn(1, 64)) }
 
     override fun getInfoItems() = listOf(
         GuiItems.tickRate(getCustomTickRate()),
         GuiItems.energyConsumptionPerTick(getEnergyConsumptionPerTick()),
     )
 
-    override fun getDividerItem() = GuiItems.RECIPES
+    override fun getDividerItem() = GuiItems.PRODUCES
 
     companion object {
 
-        private val CHOICE_INFO_SLOTS = intArrayOf(2, 4, 6)
-        private val CHOICE_SLOTS = intArrayOf(11, 13, 15)
-        private val ITEM_SLOTS = intArrayOf(10, 12, 14)
+        // cobblestone is generated and processed in 3 steps, 1 operation each
+        private const val CYCLE = 4
+        private const val MAX_STEPS = 3
 
-        private val CHANGE_ITEM = InfinityExpansion2.localization.getGuiItem(
-            Material.YELLOW_STAINED_GLASS_PANE.asMaterialType(),
-            "sw_change"
-        )
+        /**
+         * All the materials that can be made from cobblestone within 3 processes.
+         */
+        val PRODUCTS: Set<Material> by lazy {
+            val edges = mutableMapOf<Material, MutableSet<Material>>()
+            Process.entries.forEach { process ->
+                process.map.forEach { (from, to) -> edges.getOrPut(from) { mutableSetOf() }.add(to) }
+            }
+
+            val result = linkedSetOf(Material.COBBLESTONE)
+            var current = setOf(Material.COBBLESTONE)
+            repeat(MAX_STEPS) {
+                current = current.flatMap { edges[it].orEmpty() }.filter { it !in result }.toSet()
+                result.addAll(current)
+            }
+            result
+        }
     }
 
-    private enum class Choice(private val material: Material, val map: Map<Material, Material>) {
-        NONE(
-            Material.BARRIER, mapOf()
-        ),
+    /**
+     * The processes of the factory, used to decide which materials can be produced.
+     */
+    private enum class Process(val map: Map<Material, Material>) {
         FURNACE(
-            Material.FURNACE, mapOf(
+            mapOf(
                 Material.COBBLESTONE to Material.STONE,
                 Material.STONE to Material.SMOOTH_STONE,
                 Material.SAND to Material.GLASS,
@@ -178,13 +119,13 @@ class StoneworksFactory(
             )
         ),
         CRUSH(
-            Material.DIAMOND_PICKAXE, mapOf(
+            mapOf(
                 Material.COBBLESTONE to Material.GRAVEL,
                 Material.GRAVEL to Material.SAND,
             )
         ),
         COMPACT(
-            Material.PISTON, mapOf(
+            mapOf(
                 Material.STONE to Material.STONE_BRICKS,
                 Material.GRANITE to Material.POLISHED_GRANITE,
                 Material.DIORITE to Material.POLISHED_DIORITE,
@@ -193,20 +134,14 @@ class StoneworksFactory(
             )
         ),
         TRANSFORM(
-            Material.ANDESITE, buildMap {
-                put(Material.COBBLESTONE, Material.ANDESITE)
-                put(Material.ANDESITE, Material.DIORITE)
-                put(Material.DIORITE, Material.GRANITE)
-                put(Material.STONE, Material.DEEPSLATE)
-                put(Material.SAND, Material.SUSPICIOUS_SAND)
-                put(Material.GRAVEL, Material.SUSPICIOUS_GRAVEL)
-            }
-        );
-
-        val item: ItemStack
-            get() = InfinityExpansion2.localization.getGuiItem(
-                material.asMaterialType(),
-                "sw_${name}"
+            mapOf(
+                Material.COBBLESTONE to Material.ANDESITE,
+                Material.ANDESITE to Material.DIORITE,
+                Material.DIORITE to Material.GRANITE,
+                Material.STONE to Material.DEEPSLATE,
+                Material.SAND to Material.SUSPICIOUS_SAND,
+                Material.GRAVEL to Material.SUSPICIOUS_GRAVEL,
             )
+        ),
     }
 }

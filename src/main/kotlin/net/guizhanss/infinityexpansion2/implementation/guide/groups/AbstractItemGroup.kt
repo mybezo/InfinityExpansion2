@@ -1,11 +1,13 @@
 package net.guizhanss.infinityexpansion2.implementation.guide.groups
 
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile
+import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuide
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode
 import io.github.thebusybiscuit.slimefun4.core.services.sounds.SoundEffect
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu
+import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ClickAction
 import net.guizhanss.infinityexpansion2.core.menu.FlexMenu
 import net.guizhanss.infinityexpansion2.core.menu.MenuItem
 import net.guizhanss.infinityexpansion2.utils.slimefunext.getBackButton
@@ -34,6 +36,21 @@ abstract class AbstractItemGroup(
      */
     fun addMenuItem(vararg items: MenuItem) {
         _menuItems.addAll(items)
+    }
+
+    /**
+     * Add [SubGroup]s to this [AbstractItemGroup], clicking them opens the [DisplaySubGroup].
+     */
+    fun addSubGroups(vararg groups: SubGroup) {
+        addMenuItem(*groups.map {
+            object : MenuItem {
+                override fun getItem(p: Player, profile: PlayerProfile) = it.getItem(p)
+
+                override fun onClick(p: Player, profile: PlayerProfile, mode: SlimefunGuideMode, action: ClickAction) {
+                    SlimefunGuide.openItemGroup(profile, DisplaySubGroup(it), mode, 1)
+                }
+            }
+        }.toTypedArray())
     }
 
     override fun isVisible(p: Player, profile: PlayerProfile, mode: SlimefunGuideMode) =

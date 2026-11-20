@@ -17,8 +17,8 @@ class UraniumExtractor(
     recipeType: RecipeType,
     recipe: Array<out ItemStack?>,
     energyPerTick: Int,
-    inputAmount: Int,
-    outputAmount: Int,
+    val inputAmount: Int,
+    val outputAmount: Int,
 ) : HopperMachine(itemGroup, itemStack, recipeType, recipe, energyPerTick), CustomWikiItem {
 
     override val wikiUrl = "machines/uranium-extractor"

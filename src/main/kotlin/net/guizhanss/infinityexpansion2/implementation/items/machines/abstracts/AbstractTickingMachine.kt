@@ -9,6 +9,7 @@ import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponen
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset
 import net.guizhanss.guizhanlib.slimefun.machines.TickingMenuBlock
+import net.guizhanss.infinityexpansion2.core.items.attributes.Compressible
 import net.guizhanss.infinityexpansion2.core.items.attributes.CustomTickRateMachine
 import net.guizhanss.infinityexpansion2.core.items.attributes.EnergyTickingConsumer
 import net.guizhanss.infinityexpansion2.core.menu.MenuLayout
@@ -24,21 +25,23 @@ abstract class AbstractTickingMachine(
     itemStack: SlimefunItemStack,
     recipeType: RecipeType,
     recipe: Array<out ItemStack?>,
-    protected val layout: MenuLayout,
-    energyPerTick: Int,
+    val layout: MenuLayout,
+    val defaultEnergyPerTick: Int,
     tickRate: Int = 1,
 ) : TickingMenuBlock(itemGroup, itemStack, recipeType, recipe), EnergyNetComponent, EnergyTickingConsumer,
-    CustomTickRateMachine {
+    CustomTickRateMachine, Compressible {
 
     // should avoid accessing this directly, use getCustomTickRate() instead
     protected val tickRateSetting = IntRangeSetting(this, "tick-rate", 1, tickRate, 3600)
 
     // should avoid accessing this directly, use getEnergyConsumptionPerTick() instead
-    protected val energyPerTickSetting = IntRangeSetting(this, "energy-per-tick", 1, energyPerTick, 1_000_000_000)
+    protected val energyPerTickSetting = IntRangeSetting(this, "energy-per-tick", 1, defaultEnergyPerTick, 1_000_000_000)
 
     init {
         addItemSetting(tickRateSetting, energyPerTickSetting)
     }
+
+    override var multiplier: Int = 1
 
     override fun getCustomTickRate() = tickRateSetting.value
 
@@ -68,6 +71,17 @@ abstract class AbstractTickingMachine(
     }
 
     protected abstract fun process(b: Block, menu: BlockMenu): Boolean
+
+    /**
+     * For compressed machines that only run [units] of the combined machines,
+     * consume the energy of these machines only.
+     *
+     * The process should return false after calling this, so the full energy is not consumed again.
+     */
+    protected fun consumePartialEnergy(menu: BlockMenu, units: Long) {
+        val energy = getEnergyConsumptionPerTick().toLong() / multiplier * units
+        removeCharge(menu.location, energy.coerceIn(0, Int.MAX_VALUE.toLong()).toInt())
+    }
 
     protected fun BlockMenu.setStatus(itemStack: () -> ItemStack) {
         if (hasViewer()) {

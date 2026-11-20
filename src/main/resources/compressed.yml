@@ -1,0 +1,94 @@
+# Compressed Machine and Compressed Generator settings
+# A compressed machine combines multiple machines into one.
+# Its input, output and energy consumption are multiplied by the multiplier.
+# Compressed generators produce multiplied energy, reactors also consume multiplied fuel.
+#
+# Recipes (Compressor):
+#   x8  = 8 of the original machine
+#   x16 = 2 of the x8 machine
+#   x32 = 2 of the x16 machine
+#   x64 = 2 of the x32 machine
+#
+# Only the highest enabled multiplier is listed in the guide,
+# the lower multipliers are still craftable (click them in the recipe to view).
+#
+# Changes require a server restart.
+# Missing options are added automatically, existing values are kept.
+
+# Enable/disable all the compressed machines
+enabled: true
+
+# Enable/disable each multiplier.
+# Disabling a multiplier also disables all the multipliers above it,
+# because their recipes need the previous multiplier.
+multipliers:
+  x8: true
+  x16: true
+  x32: true
+  x64: true
+
+# Enable/disable the compressed versions (all multipliers) of each machine
+machines:
+  QUARRY: true
+  QUARRY_2: true
+  QUARRY_3: true
+  QUARRY_4: true
+  GEO_QUARRY: true
+  GEO_QUARRY_2: true
+  VIRTUAL_FARM: true
+  VIRTUAL_FARM_2: true
+  VIRTUAL_FARM_3: true
+  VIRTUAL_FARM_4: true
+  TREE_GROWER: true
+  TREE_GROWER_2: true
+  TREE_GROWER_3: true
+  TREE_GROWER_4: true
+  FLOWER_GROWER: true
+  FLOWER_GROWER_2: true
+  FLOWER_GROWER_3: true
+  FLOWER_GROWER_4: true
+  VOID_HARVESTER: true
+  VOID_HARVESTER_2: true
+  VOID_HARVESTER_3: true
+  STONEWORKS_FACTORY: true
+  STONEWORKS_FACTORY_2: true
+  STONEWORKS_FACTORY_3: true
+  STONEWORKS_FACTORY_4: true
+  MOB_SIMULATION_CHAMBER: true
+  URANIUM_EXTRACTOR: true
+  URANIUM_INGOT_EXTRACTOR: true
+  DUST_EXTRACTOR_PLUS: true
+  DUST_EXTRACTOR_PLUS_2: true
+  DUST_EXTRACTOR_PLUS_3: true
+  DUST_EXTRACTOR_PLUS_4: true
+  INGOT_FORMER_PLUS: true
+  INGOT_FORMER_PLUS_2: true
+  INGOT_FORMER_PLUS_3: true
+  INGOT_FORMER_PLUS_4: true
+  URANIUM_INGOT_EXTRACTOR_PLUS: true
+
+# Enable/disable the compressed versions (all multipliers) of each Slimefun Expansion item
+slimefun-expansion:
+  ADVANCED_SMELTERY: true
+  VOID_SMELTERY: true
+  ADVANCED_CHARGER: true
+  INFINITY_CHARGER: true
+  ADVANCED_GEO_MINER: true
+  VOID_CAPACITOR: true
+  # Infinity Capacitor only goes up to x16 (the energy capacity limit)
+  INFINITY_CAPACITOR: true
+
+# Enable/disable the compressed versions (all multipliers) of each generator
+# Note: Infinity Singularity Reactor only goes up to x32.
+generators:
+  HYDRO_GENERATOR: true
+  HYDRO_GENERATOR_2: true
+  GEOTHERMAL_GENERATOR: true
+  GEOTHERMAL_GENERATOR_2: true
+  SOLAR_PANEL: true
+  SOLAR_PANEL_2: true
+  SOLAR_PANEL_3: true
+  VOID_PANEL: true
+  INFINITY_PANEL: true
+  INFINITY_REACTOR: true
+  INFINITY_SINGULARITY_REACTOR: true

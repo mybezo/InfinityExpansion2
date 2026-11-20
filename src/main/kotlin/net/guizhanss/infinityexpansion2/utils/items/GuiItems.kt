@@ -116,6 +116,12 @@ internal object GuiItems {
         "recipes"
     )
 
+    fun multiplier(multiplier: Int) = InfinityExpansion2.localization.getGuiItem(
+        Material.PISTON.asMaterialType(),
+        "multiplier",
+        "&7x${multiplier}"
+    )
+
     fun tickRate(tickRate: Int) = InfinityExpansion2.localization.getGuiItem(
         Material.CLOCK.asMaterialType(),
         "tick_rate",
@@ -182,6 +188,11 @@ internal object GuiItems {
         Material.EXPERIENCE_BOTTLE.asMaterialType(),
         "experience",
         "&7${exp}"
+    )
+
+    val SW_SELECTOR_SLOT = InfinityExpansion2.localization.getGuiItem(
+        Material.LIME_STAINED_GLASS_PANE.asMaterialType(),
+        "sw_selector_slot"
     )
 
     val OSCILLATOR_SLOT = InfinityExpansion2.localization.getGuiItem(

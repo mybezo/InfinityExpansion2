@@ -18,6 +18,7 @@ import net.guizhanss.infinityexpansion2.implementation.items.machines.abstracts.
 import net.guizhanss.infinityexpansion2.implementation.items.tools.Oscillator
 import net.guizhanss.infinityexpansion2.utils.items.GuiItems
 import net.guizhanss.infinityexpansion2.utils.items.toItemStack
+import net.guizhanss.infinityexpansion2.utils.slimefunext.pushAvailable
 import org.bukkit.Material
 import org.bukkit.World
 import org.bukkit.block.Block
@@ -31,14 +32,14 @@ class Quarry(
     recipe: Array<out ItemStack?>,
     energyPerTick: Int,
     val speed: Int, // the amount of output
-    chance: Double,
+    val defaultChance: Double,
     val tier: Int, // 1 = basic, 2 = advanced, 3 = void, 4 = infinity
 ) : AbstractTickingMachine(itemGroup, itemStack, recipeType, recipe, MenuLayout.SINGLE_INPUT, energyPerTick),
     InformationalRecipeDisplayItem, CustomWikiItem {
 
     override val wikiUrl = "machines/quarry"
 
-    private val chanceSetting = DoubleRangeSetting(this, "chance", 0.0, chance, 1.0)
+    private val chanceSetting = DoubleRangeSetting(this, "chance", 0.0, defaultChance, 1.0)
     private val enabledInOverworldSetting = ItemSetting(this, "enabled-in.overworld", true)
     private val enabledInNetherSetting = ItemSetting(this, "enabled-in.nether", true)
     private val enabledInEndSetting = ItemSetting(this, "enabled-in.end", true)
@@ -68,8 +69,11 @@ class Quarry(
         menu.setStatus { GuiItems.PRODUCING }
         if (!shouldProduce()) return true
 
-        produce(menu)?.let {
-            menu.pushItem(it, *outputSlots)
+        produce(menu)?.takeUnless { it.type.isAir }?.let {
+            if (menu.pushAvailable(it, speed.toLong() * multiplier, outputSlots) == 0L) {
+                menu.setStatus { GuiItems.NO_ROOM }
+                return false
+            }
         }
 
         return true
@@ -89,11 +93,10 @@ class Quarry(
                 || Random.nextDouble() > Oscillator.getChance(oscillatorItem)
             ) {
                 // normal product from pool, fall back to base product if nothing is available
-                val product = pool.getRandomProduct(tier) ?: pool.baseProduct
-                product.toItemStack().edit { amount(speed) }
+                (pool.getRandomProduct(tier) ?: pool.baseProduct).toItemStack()
             } else {
                 // oscillator product
-                Oscillator.getTarget(oscillatorItem)!!.toItemStack().edit { amount(speed) }
+                Oscillator.getTarget(oscillatorItem)!!.toItemStack()
             }
         }
 
@@ -101,7 +104,7 @@ class Quarry(
         val baseProduct = pool.baseProduct.toItemStack().let {
             if (it.isAir()) Material.COBBLESTONE.toItem() else it
         }
-        return baseProduct.clone().apply { amount = speed }
+        return baseProduct
     }
 
     override fun getDefaultDisplayRecipes(): List<ItemStack?> {
