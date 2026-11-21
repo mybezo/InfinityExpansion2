@@ -619,6 +619,15 @@ items:
     lore-overrides:
       2: "%sftrlore_Speed_5%" # DO NOT translate this
       3: "%sftrlore_PowerPerTick_180%" # DO NOT translate this
+  VOID_ENCHANTER:
+    name: "&8Void Enchanter"
+    lore:
+      - ""
+      - "&8\u21E8 &e⚡ &7Speed: &b24x"
+      - "&8\u21E8 &e⚡ &72,000 J/t"
+    lore-overrides:
+      2: "%sftrlore_Speed_24%" # DO NOT translate this
+      3: "%sftrlore_PowerPerTick_2000%" # DO NOT translate this
   INFINITY_ENCHANTER:
     name: "&bInfinity Enchanter"
     lore:
@@ -637,6 +646,15 @@ items:
     lore-overrides:
       2: "%sftrlore_Speed_5%" # DO NOT translate this
       3: "%sftrlore_PowerPerTick_180%" # DO NOT translate this
+  VOID_DISENCHANTER:
+    name: "&8Void Disenchanter"
+    lore:
+      - ""
+      - "&8\u21E8 &e⚡ &7Speed: &b24x"
+      - "&8\u21E8 &e⚡ &72,000 J/t"
+    lore-overrides:
+      2: "%sftrlore_Speed_24%" # DO NOT translate this
+      3: "%sftrlore_PowerPerTick_2000%" # DO NOT translate this
   INFINITY_DISENCHANTER:
     name: "&bInfinity Disenchanter"
     lore:

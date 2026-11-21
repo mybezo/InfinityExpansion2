@@ -723,6 +723,21 @@ object IEItems : ItemRegistry(InfinityExpansion2.instance, InfinityExpansion2.lo
         }
     }
 
+    val VOID_ENCHANTER by buildSlimefunItem<AutoEnchanter>(24, 2_000) {
+        material = Material.ENCHANTING_TABLE.asMaterialType()
+        itemGroup = IEItemGroups.SLIMEFUN_EXPANSION
+        recipeType = RecipeType.ENHANCED_CRAFTING_TABLE
+        recipe = buildRecipe {
+            +"VAV"
+            +"PAP"
+            +"VOV"
+            'V' means VOID_BLOCK
+            'A' means ADVANCED_ENCHANTER
+            'P' means MACHINE_PLATE
+            'O' means MACHINE_CORE
+        }
+    }
+
     val INFINITY_ENCHANTER by buildSlimefunItem<AutoEnchanter>(75, 12_000) {
         material = Material.ENCHANTING_TABLE.asMaterialType()
         itemGroup = IEItemGroups.SLIMEFUN_EXPANSION
@@ -735,7 +750,7 @@ object IEItems : ItemRegistry(InfinityExpansion2.instance, InfinityExpansion2.lo
             +"PVOOVP"
             +"PIIIIP"
             'V' means VOID_INGOT
-            'A' means ADVANCED_ENCHANTER
+            'A' means VOID_ENCHANTER
             'P' means MACHINE_PLATE
             'C' means INFINITY_MACHINE_CIRCUIT
             'O' means INFINITY_MACHINE_CORE
@@ -759,6 +774,21 @@ object IEItems : ItemRegistry(InfinityExpansion2.instance, InfinityExpansion2.lo
         }
     }
 
+    val VOID_DISENCHANTER by buildSlimefunItem<AutoDisenchanter>(24, 2_000) {
+        material = Material.ENCHANTING_TABLE.asMaterialType()
+        itemGroup = IEItemGroups.SLIMEFUN_EXPANSION
+        recipeType = RecipeType.ENHANCED_CRAFTING_TABLE
+        recipe = buildRecipe {
+            +"VAV"
+            +"PAP"
+            +"VOV"
+            'V' means VOID_BLOCK
+            'A' means ADVANCED_DISENCHANTER
+            'P' means MACHINE_PLATE
+            'O' means MACHINE_CORE
+        }
+    }
+
     val INFINITY_DISENCHANTER by buildSlimefunItem<AutoDisenchanter>(90, 12_000) {
         material = Material.ENCHANTING_TABLE.asMaterialType()
         itemGroup = IEItemGroups.SLIMEFUN_EXPANSION
@@ -771,7 +801,7 @@ object IEItems : ItemRegistry(InfinityExpansion2.instance, InfinityExpansion2.lo
             +"PVOOVP"
             +"PIIIIP"
             'V' means VOID_INGOT
-            'A' means ADVANCED_DISENCHANTER
+            'A' means VOID_DISENCHANTER
             'P' means MACHINE_PLATE
             'C' means INFINITY_MACHINE_CIRCUIT
             'O' means INFINITY_MACHINE_CORE
