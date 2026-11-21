@@ -203,10 +203,12 @@ internal object CompressedMachineSetup {
      */
     private fun registerSlimefunExpansion() {
         add<Smeltery>(IEItems.ADVANCED_SMELTERY, Category.SLIMEFUN_EXPANSION) { a, m ->
-            Smeltery(a.itemGroup, a.itemStack, a.recipeType, a.recipe, a.scaleSpeed(m.speed), a.scaleEnergy(m.energyConsumption))
+            // compressed smelteries process multiple recipes at once, the speed stays the same
+            Smeltery(a.itemGroup, a.itemStack, a.recipeType, a.recipe, m.speed, a.scaleEnergy(m.energyConsumption))
         }
         add<Smeltery>(IEItems.VOID_SMELTERY, Category.SLIMEFUN_EXPANSION) { a, m ->
-            Smeltery(a.itemGroup, a.itemStack, a.recipeType, a.recipe, a.scaleSpeed(m.speed), a.scaleEnergy(m.energyConsumption))
+            // compressed smelteries process multiple recipes at once, the speed stays the same
+            Smeltery(a.itemGroup, a.itemStack, a.recipeType, a.recipe, m.speed, a.scaleEnergy(m.energyConsumption))
         }
         listOf(IEItems.ADVANCED_CHARGER, IEItems.INFINITY_CHARGER).forEach { base ->
             add<ChargingBench>(base, Category.SLIMEFUN_EXPANSION) { a, m ->
@@ -306,7 +308,7 @@ internal object CompressedMachineSetup {
      * Multiply the energy and capacity numbers in a lore line,
      * also the speed for Slimefun expansion machines (their processing speed is multiplied).
      */
-    private fun scaleLoreLine(line: String, entry: Entry, multiplier: Int): String {
+    private fun scaleLoreLine(line: String, entry: Entry, baseItem: SlimefunItem, multiplier: Int): String {
         var result = line
         if (line.contains(" J/t") || line.contains(" J Capacity")) {
             result = ENERGY_PATTERN.replace(result) { match ->
@@ -314,7 +316,8 @@ internal object CompressedMachineSetup {
                 match.groupValues[1] + "%,d".format(Locale.US, value * multiplier)
             }
         }
-        if (entry.category == Category.SLIMEFUN_EXPANSION) {
+        // smelteries multiply the recipes per operation instead of the speed
+        if (entry.category == Category.SLIMEFUN_EXPANSION && baseItem !is Smeltery) {
             result = SPEED_PATTERN.replace(result) { match ->
                 val value = match.groupValues[2].toLongOrNull() ?: return@replace match.value
                 "${match.groupValues[1]}${value * multiplier}x"
@@ -334,7 +337,7 @@ internal object CompressedMachineSetup {
             entry.category == Category.GENERATOR -> "compressed-generator"
             else -> "compressed-machine"
         }
-        val lore = (localization.getItemLore(entry.id).map { scaleLoreLine(it, entry, multiplier) } +
+        val lore = (localization.getItemLore(entry.id).map { scaleLoreLine(it, entry, baseItem, multiplier) } +
             "" + localization.getLore(loreId, multiplier))
             .map { ChatUtil.color(it) }
 
