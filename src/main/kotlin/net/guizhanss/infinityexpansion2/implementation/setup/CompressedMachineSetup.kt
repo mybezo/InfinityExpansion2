@@ -263,6 +263,7 @@ internal object CompressedMachineSetup {
 
         // write the missing options into the file, existing values are kept
         cfg.setDefaultValue("enabled", true)
+        cfg.setDefaultValue("uncompress", true)
         MULTIPLIERS.forEach { cfg.setDefaultValue("multipliers.x$it", true) }
         entries.forEach { cfg.setDefaultValue("${it.category.configSection}.${it.id}", true) }
         cfg.save()
@@ -272,6 +273,7 @@ internal object CompressedMachineSetup {
         // a multiplier is only available when all the lower multipliers are enabled
         val enabledMultipliers = MULTIPLIERS.takeWhile { cfg.getBoolean("multipliers.x$it") }
         if (enabledMultipliers.isEmpty()) return
+        val uncompress = cfg.getBoolean("uncompress")
 
         InfinityExpansion2.log(Level.INFO, "Registering compressed machines...")
         var count = 0
@@ -296,6 +298,14 @@ internal object CompressedMachineSetup {
                 (item as? Compressible)?.multiplier = multiplier
                 item.register(InfinityExpansion2.instance)
                 count++
+
+                // uncompress: 1 compressed item back into the previous multiplier in the Grind Stone
+                if (uncompress) {
+                    RecipeType.GRIND_STONE.register(
+                        arrayOf(sfis.toItem()),
+                        previous.toItem().apply { amount = multiplier / previousMultiplier }
+                    )
+                }
 
                 previous = sfis
                 previousMultiplier = multiplier
