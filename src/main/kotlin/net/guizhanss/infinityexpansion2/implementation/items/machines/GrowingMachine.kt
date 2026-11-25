@@ -36,6 +36,10 @@ open class GrowingMachine(
         addItemSetting(outputIntervalSetting)
     }
 
+    // compressed machines use the output interval of the original machine
+    private val outputInterval: Int
+        get() = ((timeSource as? GrowingMachine)?.outputIntervalSetting ?: outputIntervalSetting).value
+
     private val _recipes: MutableRecipes = mutableMapOf()
 
     val recipes: Recipes get() = _recipes
@@ -88,14 +92,14 @@ open class GrowingMachine(
     }
 
     private fun shouldProduce() =
-        tickCount % (getCustomTickRate() * outputIntervalSetting.value) == 0
+        tickCount % (getCustomTickRate() * outputInterval) == 0
 
     override fun getDefaultDisplayRecipes() = _recipes.flatMap { it.toPair().toDisplayRecipe() }
 
     override fun getInfoItems() = listOf(
         GuiItems.tickRate(getCustomTickRate()),
         GuiItems.energyConsumptionPerTick(getEnergyConsumptionPerTick()),
-        GuiItems.outputInterval(outputIntervalSetting.value),
+        GuiItems.outputInterval(outputInterval),
     )
 
     override fun getDividerItem() = GuiItems.RECIPES

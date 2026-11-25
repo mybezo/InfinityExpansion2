@@ -11,6 +11,7 @@ import net.guizhanss.guizhanlib.kt.minecraft.extensions.isAir
 import net.guizhanss.guizhanlib.kt.minecraft.extensions.toItem
 import net.guizhanss.guizhanlib.kt.minecraft.items.edit
 import net.guizhanss.infinityexpansion2.InfinityExpansion2
+import net.guizhanss.infinityexpansion2.core.config.MachineTime
 import net.guizhanss.infinityexpansion2.core.items.attributes.CustomWikiItem
 import net.guizhanss.infinityexpansion2.core.items.attributes.InformationalRecipeDisplayItem
 import net.guizhanss.infinityexpansion2.core.menu.MenuLayout
@@ -80,7 +81,18 @@ class Quarry(
     }
 
     private fun shouldProduce() =
-        tickCount % (getCustomTickRate() * InfinityExpansion2.configService.quarryInterval.value) == 0
+        tickCount % (getCustomTickRate() * outputOperations) == 0
+
+    /**
+     * The amount of operations between outputs, from machine-time in config.yml.
+     */
+    private val outputOperations: Int
+        get() = secondsToOperations(
+            MachineTime.get(
+                timeId,
+                InfinityExpansion2.configService.quarryInterval.value * MachineTime.secondsPerTick
+            )
+        )
 
     private fun produce(menu: BlockMenu): ItemStack? {
         val env = menu.location.world.environment
@@ -138,7 +150,7 @@ class Quarry(
         GuiItems.tickRate(getCustomTickRate()),
         GuiItems.energyConsumptionPerTick(getEnergyConsumptionPerTick()),
         GuiItems.chance(chanceSetting.value),
-        GuiItems.outputInterval(InfinityExpansion2.configService.quarryInterval.value),
+        GuiItems.outputInterval(outputOperations),
     )
 
     override fun getDividerItem() = GuiItems.RECIPES

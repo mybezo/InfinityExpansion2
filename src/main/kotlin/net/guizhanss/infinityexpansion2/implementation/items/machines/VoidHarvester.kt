@@ -41,7 +41,8 @@ class VoidHarvester(
         addItemSetting(totalProgressSetting)
     }
 
-    val totalProgress: Int get() = totalProgressSetting.value
+    // compressed harvesters use the total progress of the original harvester
+    val totalProgress: Int get() = ((timeSource as? VoidHarvester)?.totalProgressSetting ?: totalProgressSetting).value
 
     override fun process(b: Block, menu: BlockMenu): Boolean {
         val progress = b.getInt(PROGRESS)

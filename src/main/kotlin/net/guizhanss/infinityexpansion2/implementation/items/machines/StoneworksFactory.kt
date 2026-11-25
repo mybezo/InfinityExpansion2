@@ -8,6 +8,7 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset
 import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu
 import net.guizhanss.guizhanlib.kt.minecraft.extensions.toItem
 import net.guizhanss.guizhanlib.kt.slimefun.extensions.isSlimefunItem
+import net.guizhanss.infinityexpansion2.core.config.MachineTime
 import net.guizhanss.infinityexpansion2.core.items.attributes.CustomWikiItem
 import net.guizhanss.infinityexpansion2.core.items.attributes.InformationalRecipeDisplayItem
 import net.guizhanss.infinityexpansion2.core.menu.MenuLayout
@@ -56,9 +57,10 @@ class StoneworksFactory(
             }
         }
 
-        // produces once every 4 operations (generate + 3 processes)
-        val step = tickCount / getCustomTickRate() % CYCLE
-        if (step != CYCLE - 1) {
+        // produces once every cycle (machine-time in config.yml, default 4 operations: generate + 3 processes)
+        val cycle = outputOperations
+        val step = tickCount / getCustomTickRate() % cycle
+        if (step != cycle - 1) {
             menu.setStatus { GuiItems.PRODUCING }
             return true
         }
@@ -71,12 +73,19 @@ class StoneworksFactory(
         return true
     }
 
+    /**
+     * The amount of operations between outputs, from machine-time in config.yml.
+     */
+    private val outputOperations: Int
+        get() = secondsToOperations(MachineTime.get(timeId, CYCLE * MachineTime.secondsPerTick))
+
     override fun getDefaultDisplayRecipes(): List<ItemStack?> =
         PRODUCTS.map { it.toItem(speed.coerceIn(1, 64)) }
 
     override fun getInfoItems() = listOf(
         GuiItems.tickRate(getCustomTickRate()),
         GuiItems.energyConsumptionPerTick(getEnergyConsumptionPerTick()),
+        GuiItems.outputInterval(outputOperations),
     )
 
     override fun getDividerItem() = GuiItems.PRODUCES

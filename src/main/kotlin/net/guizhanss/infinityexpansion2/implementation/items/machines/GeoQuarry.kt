@@ -34,6 +34,10 @@ class GeoQuarry(
         addItemSetting(outputIntervalSetting)
     }
 
+    // compressed machines use the output interval of the original machine
+    private val outputInterval: Int
+        get() = ((timeSource as? GeoQuarry)?.outputIntervalSetting ?: outputIntervalSetting).value
+
     override fun process(b: Block, menu: BlockMenu): Boolean {
         menu.setStatus { GuiItems.PRODUCING }
         if (!shouldProduce()) return true
@@ -48,7 +52,7 @@ class GeoQuarry(
     }
 
     private fun shouldProduce() =
-        tickCount % (getCustomTickRate() * outputIntervalSetting.value) == 0
+        tickCount % (getCustomTickRate() * outputInterval) == 0
 
     private fun produce(menu: BlockMenu): ItemStack? {
         val biome = menu.location.block.biome
@@ -78,7 +82,7 @@ class GeoQuarry(
     override fun getInfoItems() = listOf(
         GuiItems.tickRate(getCustomTickRate()),
         GuiItems.energyConsumptionPerTick(getEnergyConsumptionPerTick()),
-        GuiItems.outputInterval(outputIntervalSetting.value)
+        GuiItems.outputInterval(outputInterval)
     )
 
     override fun getDividerItem() = GuiItems.RECIPES

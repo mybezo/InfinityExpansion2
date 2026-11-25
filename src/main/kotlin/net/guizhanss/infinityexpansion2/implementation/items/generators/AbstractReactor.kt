@@ -1,6 +1,7 @@
 package net.guizhanss.infinityexpansion2.implementation.items.generators
 
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack
 import io.github.thebusybiscuit.slimefun4.api.items.settings.IntRangeSetting
 import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType
@@ -31,6 +32,8 @@ abstract class AbstractReactor(
      */
     override var multiplier: Int = 1
 
+    override var timeSource: SlimefunItem? = null
+
     private val tickRateSetting = IntRangeSetting(this, "tick-rate", 1, 1, 3600)
     private val energyProductionSetting =
         IntRangeSetting(this, "energy-production", 1, defaultProduction, Int.MAX_VALUE)
@@ -45,7 +48,8 @@ abstract class AbstractReactor(
 
     override fun getOutputSlots() = intArrayOf()
 
-    override fun getCustomTickRate() = tickRateSetting.value
+    // compressed items use the tick rate of the original item
+    override fun getCustomTickRate() = (timeSource as? AbstractReactor)?.getCustomTickRate() ?: tickRateSetting.value
 
     override fun getCapacity() = getEnergyProduction()
 

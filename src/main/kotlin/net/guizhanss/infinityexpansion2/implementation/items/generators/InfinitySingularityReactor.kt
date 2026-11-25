@@ -39,6 +39,11 @@ class InfinitySingularityReactor(
         addItemSetting(infinitySingularityDurationSetting)
     }
 
+    // compressed reactors use the duration of the original reactor
+    private val infinitySingularityDuration: Int
+        get() = ((timeSource as? InfinitySingularityReactor)?.infinitySingularityDurationSetting
+            ?: infinitySingularityDurationSetting).value
+
     override fun setup(preset: BlockMenuPreset) {
         preset.drawBackground(BACKGROUND)
         preset.drawBackground(BORDER_ITEM, INPUT_BORDER)
@@ -69,12 +74,12 @@ class InfinitySingularityReactor(
 
             // input is valid, start new progress
             menu.consumeItem(INPUT, units)
-            menu.setStatus { info(infinitySingularityDurationSetting.value) }
+            menu.setStatus { info(infinitySingularityDuration) }
             l.setProgress(1)
             return l.getUnitsProduction()
         }
 
-        if (progress > infinitySingularityDurationSetting.value) { // done
+        if (progress > infinitySingularityDuration) { // done
             menu.setStatus { GuiItems.PRODUCING }
             l.setProgress(0)
             return l.getUnitsProduction()
@@ -83,7 +88,7 @@ class InfinitySingularityReactor(
         // progressing
         l.setProgress(progress + 1)
         menu.setStatus {
-            info(infinitySingularityDurationSetting.value - progress)
+            info(infinitySingularityDuration - progress)
         }
         return l.getUnitsProduction()
     }
@@ -100,7 +105,7 @@ class InfinitySingularityReactor(
     override fun getInfoItems() = listOf(
         GuiItems.tickRate(getCustomTickRate()),
         GuiItems.energyProductionPerTick(getEnergyProduction()),
-        infoInfinitySing(infinitySingularityDurationSetting.value),
+        infoInfinitySing(infinitySingularityDuration),
     )
 
     companion object {

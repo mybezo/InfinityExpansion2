@@ -42,6 +42,12 @@ class InfinityReactor(
         addItemSetting(voidIngotDurationSetting, infinityIngotDurationSetting)
     }
 
+    // compressed reactors use the durations of the original reactor
+    private val voidIngotDuration: Int
+        get() = ((timeSource as? InfinityReactor)?.voidIngotDurationSetting ?: voidIngotDurationSetting).value
+    private val infinityIngotDuration: Int
+        get() = ((timeSource as? InfinityReactor)?.infinityIngotDurationSetting ?: infinityIngotDurationSetting).value
+
     override fun postRegister() {
         super.postRegister()
 
@@ -97,18 +103,18 @@ class InfinityReactor(
             // input is valid, start new progress
             menu.consumeItem(VOID_INPUT, units)
             menu.consumeItem(INFINITY_INPUT, units)
-            menu.setStatus { info(infinityIngotDurationSetting.value, voidIngotDurationSetting.value) }
+            menu.setStatus { info(infinityIngotDuration, voidIngotDuration) }
             l.setProgress(1)
             return l.getUnitsProduction()
         }
 
-        if (progress > infinityIngotDurationSetting.value) { // done
+        if (progress > infinityIngotDuration) { // done
             menu.setStatus { GuiItems.PRODUCING }
             l.setProgress(0)
             return l.getUnitsProduction()
         }
 
-        if (Math.floorMod(progress, voidIngotDurationSetting.value) == 0) { // need void
+        if (Math.floorMod(progress, voidIngotDuration) == 0) { // need void
             val units = l.getUnits()
             if (voidInput == null || !voidInput.isVoidIngot() || voidInput.amount < units) {
                 menu.setStatus { NEED_VOID }
@@ -122,8 +128,8 @@ class InfinityReactor(
         l.setProgress(progress + 1)
         menu.setStatus {
             info(
-                infinityIngotDurationSetting.value - progress,
-                voidIngotDurationSetting.value - Math.floorMod(progress, voidIngotDurationSetting.value)
+                infinityIngotDuration - progress,
+                voidIngotDuration - Math.floorMod(progress, voidIngotDuration)
             )
         }
         return l.getUnitsProduction()
@@ -141,8 +147,8 @@ class InfinityReactor(
     override fun getInfoItems() = listOf(
         GuiItems.tickRate(getCustomTickRate()),
         GuiItems.energyProductionPerTick(getEnergyProduction()),
-        infoVoid(voidIngotDurationSetting.value),
-        infoInfinity(infinityIngotDurationSetting.value),
+        infoVoid(voidIngotDuration),
+        infoInfinity(infinityIngotDuration),
     )
 
     companion object {

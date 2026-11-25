@@ -126,6 +126,8 @@ storage:
 quarry:
   # The amount of runs required to output once (affected by tick rate)
   # Range: 1 to 3600
+  # Note: the output time of each quarry is now set in "machine-time" below.
+  # This value is only used as the default of the quarries in machine-time when they are first added.
   output-interval: 10
 
   # The product pool of all the quarries
@@ -332,5 +334,23 @@ infinity-gear:
     enchantments:
       protection: 20
       thorns: 10
+
+# Machine time
+# The time between products of the machines below, in real seconds.
+# The time uses the default Slimefun ticker (10 game ticks = 0.5 seconds), and already takes the
+# tick rate of the machine into account, so the real time matches the number here.
+# Decimals are allowed, the minimum is 0.5 seconds. 0 or negative values are ignored (the default is used).
+# Missing machines are added automatically on startup, existing values are kept.
+# Compressed versions use the time of their original machine.
+# Changes require a server restart.
+#
+# Example:
+#   machine-time:
+#     QUARRY: 5
+#     QUARRY_4: 2.5
+#
+# Other machines already have their own time settings in plugins/Slimefun/Items.yml
+# ("tick-rate", "output-interval", "total-progress", reactor durations), counted in Slimefun ticks (0.5 seconds each).
+machine-time: {}
 
 ## Some InfinityExpansion2 items have their extra config options in Items.yml, check the wiki for more information.

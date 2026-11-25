@@ -295,7 +295,11 @@ internal object CompressedMachineSetup {
                 val args = Args(group, sfis, RecipeType.COMPRESSOR, recipe, multiplier)
 
                 val item = entry.factory(args, baseItem) ?: return@entry
-                (item as? Compressible)?.multiplier = multiplier
+                (item as? Compressible)?.let {
+                    it.multiplier = multiplier
+                    // compressed items use the time settings of the original item
+                    it.timeSource = baseItem
+                }
                 item.register(InfinityExpansion2.instance)
                 count++
 

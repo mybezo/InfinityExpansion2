@@ -9,6 +9,7 @@ import net.guizhanss.guizhanlib.kt.slimefun.config.ConfigField
 import net.guizhanss.guizhanlib.kt.slimefun.config.addonConfig
 import net.guizhanss.guizhanlib.kt.slimefun.config.migration.configMigrations
 import net.guizhanss.infinityexpansion2.InfinityExpansion2
+import net.guizhanss.infinityexpansion2.core.config.MachineTime
 import net.guizhanss.infinityexpansion2.core.config.QuarryPool
 import net.guizhanss.infinityexpansion2.core.config.ResourceSynthesizerRecipe
 import net.guizhanss.infinityexpansion2.utils.bukkitext.getAsSerializable
@@ -121,8 +122,26 @@ class ConfigService(plugin: InfinityExpansion2) {
         compressedConfig.setDefaultValue("enabled", true)
     }
 
+    init {
+        // machine-time: defaults are the times used before this option existed
+        val quarrySeconds = quarryInterval.value * MachineTime.secondsPerTick
+        val stoneworksSeconds = STONEWORKS_OPERATIONS * MachineTime.secondsPerTick
+        MachineTime.load(plugin, buildMap {
+            listOf("QUARRY", "QUARRY_2", "QUARRY_3", "QUARRY_4").forEach { put(it, quarrySeconds) }
+            listOf("STONEWORKS_FACTORY", "STONEWORKS_FACTORY_2", "STONEWORKS_FACTORY_3", "STONEWORKS_FACTORY_4")
+                .forEach { put(it, stoneworksSeconds) }
+        })
+        config.reload()
+    }
+
     fun reload() {
         config.reload()
         mobSimConfig.reload()
+    }
+
+    companion object {
+
+        // the stoneworks factory generates cobblestone and processes it in 3 steps
+        private const val STONEWORKS_OPERATIONS = 4
     }
 }

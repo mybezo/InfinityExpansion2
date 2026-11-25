@@ -1,6 +1,7 @@
 package net.guizhanss.infinityexpansion2.implementation.items.machines.abstracts
 
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack
 import io.github.thebusybiscuit.slimefun4.api.items.settings.IntRangeSetting
 import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType
@@ -12,7 +13,9 @@ import net.guizhanss.guizhanlib.slimefun.machines.TickingMenuBlock
 import net.guizhanss.infinityexpansion2.core.items.attributes.Compressible
 import net.guizhanss.infinityexpansion2.core.items.attributes.CustomTickRateMachine
 import net.guizhanss.infinityexpansion2.core.items.attributes.EnergyTickingConsumer
+import net.guizhanss.infinityexpansion2.core.config.MachineTime
 import net.guizhanss.infinityexpansion2.core.menu.MenuLayout
+import net.guizhanss.infinityexpansion2.implementation.IEItems
 import net.guizhanss.infinityexpansion2.utils.items.GuiItems
 import org.bukkit.block.Block
 import org.bukkit.inventory.ItemStack
@@ -43,7 +46,26 @@ abstract class AbstractTickingMachine(
 
     override var multiplier: Int = 1
 
-    override fun getCustomTickRate() = tickRateSetting.value
+    override var timeSource: SlimefunItem? = null
+
+    /**
+     * The item whose time settings are used: the original machine for compressed machines, otherwise itself.
+     */
+    protected val timeItem: AbstractTickingMachine get() = timeSource as? AbstractTickingMachine ?: this
+
+    /**
+     * The machine id used for `machine-time` in config.yml (compressed machines use the original id).
+     */
+    protected val timeId: String get() = timeItem.id.removePrefix(IEItems.prefix)
+
+    override fun getCustomTickRate() =
+        (timeSource as? AbstractTickingMachine)?.getCustomTickRate() ?: tickRateSetting.value
+
+    /**
+     * Convert real seconds to the amount of operations of this machine (affected by the tick rate), at least 1.
+     */
+    protected fun secondsToOperations(seconds: Double): Int =
+        Math.round(seconds / (MachineTime.secondsPerTick * getCustomTickRate())).toInt().coerceAtLeast(1)
 
     override fun getEnergyConsumptionPerTick() = energyPerTickSetting.value
 

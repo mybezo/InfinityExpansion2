@@ -34,6 +34,18 @@ Preview builds: [Click here to download](https://resources.guizhanss.com/plugin/
 > 
 > Supporting every fork is not realistic. Please consult the owner of the fork you are using regarding its compatibility with and support for addons.
 
+## Configuration
+
+- `config.yml`: general options. `machine-time` sets the time between products (in real seconds) of
+  the Quarries and Stoneworks Factories, one entry per machine tier. Missing machines are added automatically,
+  0 or negative values are ignored. Changes require a server restart.
+- `plugins/Slimefun/Items.yml`: per-item settings of Slimefun, including the time settings of the other machines
+  (`tick-rate`, `output-interval`, `total-progress` and reactor durations), counted in Slimefun ticks
+  (0.5 seconds each with the default ticker).
+- `mob-simulation.yml`: mob data cards.
+- `compressed.yml`: compressed machines, generators and Slimefun Expansion items (x8 to x64).
+  Compressed items use the time settings of their original items.
+
 ## Wiki
 
 [Click to visit the wiki](https://docs.ybw0014.dev/infinity-expansion-2/)

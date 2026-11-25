@@ -38,6 +38,8 @@ class EnergyGenerator(
 
     override var multiplier: Int = 1
 
+    override var timeSource: SlimefunItem? = null
+
     override val wikiUrl: String
         get() = "generators/" + when (type) {
             GeneratorType.HYDROELECTRIC -> "hydro"
@@ -64,7 +66,8 @@ class EnergyGenerator(
 
     override fun getEnergyProduction() = energyProductionSetting.value
 
-    override fun getCustomTickRate() = tickRateSetting.value
+    // compressed items use the tick rate of the original item
+    override fun getCustomTickRate() = (timeSource as? EnergyGenerator)?.getCustomTickRate() ?: tickRateSetting.value
 
     override fun getGeneratedOutput(l: Location, data: Config): Int {
         val sfItem = l.getSfItem()
