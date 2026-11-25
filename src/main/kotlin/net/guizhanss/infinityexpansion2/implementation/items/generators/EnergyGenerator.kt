@@ -67,7 +67,7 @@ class EnergyGenerator(
     override fun getEnergyProduction() = energyProductionSetting.value
 
     // compressed items use the tick rate of the original item
-    override fun getCustomTickRate() = (timeSource as? EnergyGenerator)?.getCustomTickRate() ?: tickRateSetting.value
+    override fun getCustomTickRate(): Int = (timeSource as? EnergyGenerator)?.getCustomTickRate() ?: tickRateSetting.value
 
     override fun getGeneratedOutput(l: Location, data: Config): Int {
         val sfItem = l.getSfItem()

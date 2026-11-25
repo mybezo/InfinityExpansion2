@@ -49,7 +49,7 @@ abstract class AbstractReactor(
     override fun getOutputSlots() = intArrayOf()
 
     // compressed items use the tick rate of the original item
-    override fun getCustomTickRate() = (timeSource as? AbstractReactor)?.getCustomTickRate() ?: tickRateSetting.value
+    override fun getCustomTickRate(): Int = (timeSource as? AbstractReactor)?.getCustomTickRate() ?: tickRateSetting.value
 
     override fun getCapacity() = getEnergyProduction()
 

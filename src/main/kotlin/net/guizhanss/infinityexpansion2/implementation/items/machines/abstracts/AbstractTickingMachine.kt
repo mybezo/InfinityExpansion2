@@ -58,7 +58,7 @@ abstract class AbstractTickingMachine(
      */
     protected val timeId: String get() = timeItem.id.removePrefix(IEItems.prefix)
 
-    override fun getCustomTickRate() =
+    override fun getCustomTickRate(): Int =
         (timeSource as? AbstractTickingMachine)?.getCustomTickRate() ?: tickRateSetting.value
 
     /**
